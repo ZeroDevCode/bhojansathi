@@ -1,0 +1,29 @@
+  {
+  "project_info": {
+    "project_number": "234216387522",
+    "project_id": "bhojansathi-3eba2",
+    "storage_bucket": "bhojansathi-3eba2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234216387522:android:c1350b7eab75578a411c5b",
+        "android_client_info": {
+          "package_name": "com.example.bhojansathi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM8mpIGH6w7EuXxGAXsXwGElsYP2j9rq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
