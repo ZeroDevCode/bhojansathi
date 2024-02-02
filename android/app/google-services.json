@@ -1,13 +1,13 @@
-  {
+{
   "project_info": {
-    "project_number": "234216387522",
-    "project_id": "bhojansathi-3eba2",
-    "storage_bucket": "bhojansathi-3eba2.appspot.com"
+    "project_number": "785302734592",
+    "project_id": "bhojansathi-7873d",
+    "storage_bucket": "bhojansathi-7873d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:234216387522:android:c1350b7eab75578a411c5b",
+        "mobilesdk_app_id": "1:785302734592:android:279e61d010dca7819955e5",
         "android_client_info": {
           "package_name": "com.example.bhojansathi"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBM8mpIGH6w7EuXxGAXsXwGElsYP2j9rq4"
+          "current_key": "AIzaSyBDGmTueS9J1JRgCMbgdF0jZNyJDWlbpFk"
         }
       ],
       "services": {
