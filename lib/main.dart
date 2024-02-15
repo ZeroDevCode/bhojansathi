@@ -38,6 +38,9 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
+        theme: ThemeData(
+          useMaterial3: true
+        ),
         routerConfig: router,
       ),
     );

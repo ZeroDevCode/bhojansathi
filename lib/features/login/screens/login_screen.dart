@@ -109,7 +109,6 @@ class _RegistrationScreenState extends State<LoginScreen> {
               BlocListener<LogInBloc, LogInState>(
                 listener: (context, state) {
                   if (state.isOtpSent) {
-                    print("it should be printed=====");
                     context.go('/otpScreen');
                     if (kDebugMode) {
                       print(state.verificationId);
@@ -161,8 +160,7 @@ class _RegistrationScreenState extends State<LoginScreen> {
                       height: 45,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 255, 223, 70),
+                          backgroundColor:Colors.deepOrange,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -171,7 +169,7 @@ class _RegistrationScreenState extends State<LoginScreen> {
                           _onLoginPressed();
                         },
                         child: const Text(
-                          "Send the code",
+                          "Verify",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
