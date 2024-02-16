@@ -15,9 +15,9 @@ class Uninitialized extends AuthState {
 }
 
 class Authenticated extends AuthState {
-  const Authenticated({required this.phoneNo});
-
   final String phoneNo;
+
+  const Authenticated({required this.phoneNo});
 
   @override
   String toString() {

@@ -7,6 +7,7 @@ import 'package:bhojansathi/repositories/user_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'firebase_options.dart';
 
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         theme: ThemeData(
-          useMaterial3: true
+          useMaterial3: true,
+          fontFamily: GoogleFonts.poppins().fontFamily,
         ),
         routerConfig: router,
       ),

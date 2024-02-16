@@ -60,8 +60,10 @@ class _OTPScreenState extends State<OTPScreen> {
             listener: (context, state) {
               if (state is UserRegistered) {
                 context.go('/home');
+                dev.log("UserRegistered", name: "UserRegistered");
               } else if (state is UserNotRegistered) {
-                context.go('/user_register');
+                dev.log("UserNotRegistered", name: "UserNotRegistered");
+                context.go('/user_register_screen');
               } else if (state is GettingUser) {
                 showDialog(
                   context: context,
@@ -118,10 +120,6 @@ class _OTPScreenState extends State<OTPScreen> {
                 Pinput(
                   length: 6,
                   controller: otpController,
-                  // defaultPinTheme: defaultPinTheme,
-                  // focusedPinTheme: focusedPinTheme,
-                  // submittedPinTheme: submittedPinTheme,
-
                   showCursor: true,
                   onCompleted: (pin) => print(pin),
                 ),
@@ -132,19 +130,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   bloc: _loginBloc,
                   listener: (context, state) {
                     if (state.isOtpVerified) {
-                      // context.go('/home');
                       context.read<AuthBloc>().add(LoggedIn());
-                      // Future.delayed(
-                      //   const Duration(seconds: 0),
-                      //   () {
-                      //     final phoneNo = (context.read<AuthBloc>().state
-                      //             as Authenticated)
-                      //         .phoneNo;
-                      //     context
-                      //         .read<UserRegisterBloc>()
-                      //         .add(GetUser(phoneNo));
-                      //   },
-                      // );
                     } else if (state.isOtpError) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -161,10 +147,11 @@ class _OTPScreenState extends State<OTPScreen> {
                       height: 45,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 255, 223, 70),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
+                            backgroundColor: Colors.deepOrangeAccent.shade400,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                           onPressed: () async {
                             FirebaseAuth firebaseAuth = FirebaseAuth.instance;
                             dev.log("OTP: $otp", name: "OTP");

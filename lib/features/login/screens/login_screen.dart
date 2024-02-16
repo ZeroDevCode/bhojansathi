@@ -109,7 +109,7 @@ class _RegistrationScreenState extends State<LoginScreen> {
               BlocListener<LogInBloc, LogInState>(
                 listener: (context, state) {
                   if (state.isOtpSent) {
-                    context.go('/otpScreen');
+                    context.go('/otp_screen');
                     if (kDebugMode) {
                       print(state.verificationId);
                     }
@@ -127,9 +127,14 @@ class _RegistrationScreenState extends State<LoginScreen> {
                       context: context,
                       builder: (context) {
                         return const AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
                           content: Row(
                             children: [
-                              CircularProgressIndicator(),
+                              CircularProgressIndicator(color: Colors.deepOrange),
                               SizedBox(
                                 width: 20,
                               ),

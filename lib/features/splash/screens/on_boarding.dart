@@ -1,29 +1,18 @@
 import 'package:bhojansathi/generated/assets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: OnboardingScreen(),
-    );
-  }
-}
+import 'package:preload_page_view/preload_page_view.dart';
 
 class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+
   @override
-  _OnboardingScreenState createState() => _OnboardingScreenState();
+  OnboardingScreenState createState() => OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  PageController _pageController = PageController(initialPage: 0);
+class OnboardingScreenState extends State<OnboardingScreen> {
+  final PreloadPageController _pageController =
+      PreloadPageController(initialPage: 0);
   int currentPageIndex = 0;
 
   @override
@@ -31,13 +20,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          PageView(
+          PreloadPageView(
+            pageSnapping: true,
+            physics: ClampingScrollPhysics(),
             controller: _pageController,
             onPageChanged: (index) {
-              setState(() {
-                currentPageIndex = index;
-              });
+              setState(
+                () {
+                  currentPageIndex = index;
+                },
+              );
             },
+            preloadPagesCount: 4,
             children: [
               OnboardingPage(
                 imagePath: Assets.onboardingOne,
@@ -50,6 +44,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     curve: Curves.ease,
                   );
                 },
+                color: Color(0xFFFFE1D7),
               ),
               OnboardingPage(
                 imagePath: Assets.onboardingTwo,
@@ -62,6 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     curve: Curves.ease,
                   );
                 },
+                color: Color(0xFFF1F0F5),
               ),
               OnboardingPage(
                 imagePath: Assets.onboardingThree,
@@ -74,9 +70,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     curve: Curves.ease,
                   );
                 },
+                color: Color(0xFFFFFFFF),
               ),
               OnboardingPage(
-                imagePath: Assets.onboardingThree,
+                imagePath: Assets.onboardingFour,
                 title: 'Volunteer',
                 description:
                     'Delivering joy through donated food, making hearts smile.',
@@ -84,25 +81,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   context.go('/home_Screen');
                 },
                 isLastPage: true,
+                color: Color(0xFFE8E8E8),
               ),
             ],
           ),
           Positioned(
-              bottom: 10.00,
-              left: 0,
-              right: 0,
-              child: Container(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  child: currentPageIndex != 3
-                      ? SizedBox(
-                          width: 100, height: 100, child: buildIndicators())
-                      : SizedBox(
-                          width: 300,
-                          height: 60,
-                          child: buildGetStartedButton(context)),
-                ),
-              )),
+            bottom: 10.00,
+            left: 0,
+            right: 0,
+            child: Container(
+              alignment: Alignment.center,
+              child: SizedBox(
+                child: currentPageIndex != 3
+                    ? SizedBox(
+                        width: 100, height: 100, child: buildIndicators())
+                    : SizedBox(
+                        width: 300,
+                        height: 60,
+                        child: buildGetStartedButton(context),
+                      ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -140,17 +140,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         width: 304,
         height: 50,
         decoration: ShapeDecoration(
-          color: const Color(0xFFE47343),
+          // color: const Color(0xFFE47343),
+          color: Colors.deepOrange,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        child: const Text(
-          "Get Started",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold
+        child: InkWell(
+          onTap: () {
+            context.go('/auth_screen');
+          },
+          child: const Text(
+            "Get Started",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
@@ -170,53 +177,60 @@ class OnboardingPage extends StatelessWidget {
   final String description;
   final VoidCallback onNext;
   final bool isLastPage;
+  final Color color;
 
   const OnboardingPage({
+    super.key,
     required this.imagePath,
     required this.title,
     required this.description,
     required this.onNext,
+    required this.color,
     this.isLastPage = false,
-  }) : super();
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              imagePath,
-              height: 200,
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+    return Container(
+      color: color,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                imagePath,
+                height: 200,
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                description,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  description,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-      ],
+            ],
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

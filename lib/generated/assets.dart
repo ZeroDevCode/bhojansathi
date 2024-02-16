@@ -4,9 +4,12 @@ class Assets {
 
   static const String imagesRegistration = 'assets/images/registration.png';
   static const String imagesVerification = 'assets/images/verification.png';
-  static const String onboardingFour = 'assets/onboarding/four.png';
+  static const String onboardingFour = 'assets/onboarding/four.jpg';
   static const String onboardingOne = 'assets/onboarding/one.png';
-  static const String onboardingThree = 'assets/onboarding/three.jpg';
+  static const String onboardingThree = 'assets/onboarding/three.png';
   static const String onboardingTwo = 'assets/onboarding/two.png';
+  static const String usertypeIndividual = 'assets/usertype/individual.jpg';
+  static const String usertypeOrganization = 'assets/usertype/organization.jpg';
+  static const String usertypeVolunter = 'assets/usertype/volunter.jpg';
 
 }
