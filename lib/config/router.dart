@@ -1,5 +1,6 @@
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/features/auth/screen/auth_screen.dart';
+import 'package:bhojansathi/features/home/home_screen.dart';
 import 'package:bhojansathi/features/login/screens/login_screen.dart';
 import 'package:bhojansathi/features/login/screens/otp_screen.dart';
 import 'package:bhojansathi/features/login/screens/user_register_screen.dart';
@@ -7,7 +8,6 @@ import 'package:bhojansathi/features/login/screens/user_types.dart';
 import 'package:bhojansathi/features/splash/screens/on_boarding.dart';
 import 'package:bhojansathi/screens/base.dart';
 import 'package:bhojansathi/screens/chat.dart';
-import 'package:bhojansathi/screens/home.dart';
 import 'package:bhojansathi/screens/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -64,7 +64,7 @@ final router = GoRouter(
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: RoutePaths.baseScreen,
-          builder: (context, state) => const Home(),
+          builder: (context, state) => const HomePage(),
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
