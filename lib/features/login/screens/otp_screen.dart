@@ -3,6 +3,7 @@ import 'dart:developer' as dev;
 import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
 import 'package:bhojansathi/bloc/login/login_bloc.dart';
 import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
+import 'package:bhojansathi/config/routePaths.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,11 +60,11 @@ class _OTPScreenState extends State<OTPScreen> {
           BlocListener<UserRegisterBloc, UserRegisterState>(
             listener: (context, state) {
               if (state is UserRegistered) {
-                context.go('/user_type_screen');
+                context.go(RoutePaths.baseScreen);
                 dev.log("UserRegistered", name: "UserRegistered");
               } else if (state is UserNotRegistered) {
                 dev.log("UserNotRegistered", name: "UserNotRegistered");
-                context.go('/user_type_screen');
+                context.go(RoutePaths.baseScreen);
               } else if (state is GettingUser) {
                 showDialog(
                   context: context,

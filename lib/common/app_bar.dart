@@ -6,7 +6,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color.fromARGB(255, 255, 239, 233),
+      elevation: 5,
+      backgroundColor: Colors.white,
       leading: IconButton(
         icon: Image.asset(
           'assets/images/location.png',
@@ -32,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.notifications),
+          icon: const Icon(Icons.notifications_outlined),
           onPressed: () {
             // Handle bell icon tap
           },

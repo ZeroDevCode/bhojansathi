@@ -148,7 +148,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
         ),
         child: InkWell(
           onTap: () {
-            context.go(RoutePaths.authScreen);
+            context.go(RoutePaths.loginScreen);
           },
           child: const Text(
             "Get Started",

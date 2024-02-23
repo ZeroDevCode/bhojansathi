@@ -1,6 +1,6 @@
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/features/auth/screen/auth_screen.dart';
-import 'package:bhojansathi/features/home/home_screen.dart';
+import 'package:bhojansathi/screens/home/screens/home_screen.dart';
 import 'package:bhojansathi/features/login/screens/login_screen.dart';
 import 'package:bhojansathi/features/login/screens/otp_screen.dart';
 import 'package:bhojansathi/features/login/screens/user_register_screen.dart';
@@ -8,7 +8,9 @@ import 'package:bhojansathi/features/login/screens/user_types.dart';
 import 'package:bhojansathi/features/splash/screens/on_boarding.dart';
 import 'package:bhojansathi/screens/base.dart';
 import 'package:bhojansathi/screens/chat.dart';
+import 'package:bhojansathi/screens/new_donation.dart';
 import 'package:bhojansathi/screens/notification.dart';
+import 'package:bhojansathi/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -64,17 +66,47 @@ final router = GoRouter(
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: RoutePaths.baseScreen,
-          builder: (context, state) => const HomePage(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: const HomePage(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) => child,
+          ),
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: RoutePaths.chatScreen,
-          builder: (context, state) => const Chat(),
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: Chat(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) => child,
+          ),
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
-          path: RoutePaths.chatScreen,
-          builder: (context, state) => const NotificationJ(),
+          path: RoutePaths.newDonationScreen,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: const NewDonationScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) => child,
+          ),
+        ),
+        GoRoute(
+          parentNavigatorKey: _shellNavigatorKey,
+          path: RoutePaths.notificationScreen,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: const NotificationJ(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) => child,
+          ),
+        ),
+        GoRoute(
+          parentNavigatorKey: _shellNavigatorKey,
+          path: RoutePaths.profileScreen,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: const ProfileScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) => child,
+          ),
         ),
       ],
     ),

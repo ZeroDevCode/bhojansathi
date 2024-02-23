@@ -10,4 +10,6 @@ class RoutePaths{
   static const String baseScreen = '/baseScreen';
   static const String chatScreen = '/chatScreen';
   static const String notificationScreen = '/notificationScreen';
+  static const String newDonationScreen = '/newDonation';
+  static const String profileScreen = '/profileScreen';
 }

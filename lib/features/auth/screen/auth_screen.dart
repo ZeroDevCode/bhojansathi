@@ -18,10 +18,13 @@ class AuthScreen extends StatelessWidget {
           listener: (context, state) {
             if (state is Uninitialized) {
             } else if (state is UnAuthenticated) {
+              dev.log('UnAuthenticated', name: 'Auth');
               context.go(RoutePaths.onBoardingScreen);
             } else if (state is Authenticated) {
+              dev.log('Authenticated', name: 'Auth');
               context.go(RoutePaths.baseScreen);
             } else {
+              dev.log('Error', name: 'Auth');
               context.go(RoutePaths.loginScreen);
             }
           },
