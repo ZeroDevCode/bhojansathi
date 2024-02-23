@@ -1,16 +1,17 @@
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/features/auth/screen/auth_screen.dart';
-import 'package:bhojansathi/screens/home/screens/home_screen.dart';
+import 'package:bhojansathi/shell/home/history_screen.dart';
+import 'package:bhojansathi/shell/home/screens/home_screen.dart';
 import 'package:bhojansathi/features/login/screens/login_screen.dart';
 import 'package:bhojansathi/features/login/screens/otp_screen.dart';
 import 'package:bhojansathi/features/login/screens/user_register_screen.dart';
 import 'package:bhojansathi/features/login/screens/user_types.dart';
 import 'package:bhojansathi/features/splash/screens/on_boarding.dart';
-import 'package:bhojansathi/screens/base.dart';
-import 'package:bhojansathi/screens/chat.dart';
-import 'package:bhojansathi/screens/new_donation.dart';
-import 'package:bhojansathi/screens/notification.dart';
-import 'package:bhojansathi/screens/profile_screen.dart';
+import 'package:bhojansathi/shell/base/screens/base.dart';
+import 'package:bhojansathi/shell/chat/screens/chat.dart';
+import 'package:bhojansathi/shell/donations/screens/new_donation.dart';
+import 'package:bhojansathi/shell/notification/screens/notification.dart';
+import 'package:bhojansathi/shell/profile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -76,7 +77,7 @@ final router = GoRouter(
           parentNavigatorKey: _shellNavigatorKey,
           path: RoutePaths.chatScreen,
           pageBuilder: (context, state) => CustomTransitionPage(
-            child: Chat(),
+            child: const Chat(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) => child,
           ),
@@ -107,6 +108,16 @@ final router = GoRouter(
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) => child,
           ),
+        ),
+        GoRoute(
+          path: RoutePaths.historyScreen,
+          pageBuilder: (context, state) {
+            return CustomTransitionPage(
+              child:const HistoryScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) => child,
+            );
+          },
         ),
       ],
     ),

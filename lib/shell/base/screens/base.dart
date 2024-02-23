@@ -33,7 +33,7 @@ class _BaseScreenState extends State<BaseScreen> {
             } else if (index == 2) {
               context.go(RoutePaths.newDonationScreen);
             } else if (index == 3) {
-              context.go(RoutePaths.notificationScreen);
+              context.go(RoutePaths.historyScreen);
             } else if (index == 4) {
               context.go(RoutePaths.profileScreen);
             }
