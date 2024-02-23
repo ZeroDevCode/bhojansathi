@@ -1,6 +1,7 @@
 import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
 import 'package:bhojansathi/bloc/login/login_bloc.dart';
 import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
+import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/utils/validators.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -109,7 +110,7 @@ class _RegistrationScreenState extends State<LoginScreen> {
               BlocListener<LogInBloc, LogInState>(
                 listener: (context, state) {
                   if (state.isOtpSent) {
-                    context.go('/otp_screen');
+                    context.go(RoutePaths.otpScreen);
                     if (kDebugMode) {
                       print(state.verificationId);
                     }
