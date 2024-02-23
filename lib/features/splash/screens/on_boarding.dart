@@ -1,3 +1,4 @@
+import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/generated/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -77,9 +78,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
                 title: 'Volunteer',
                 description:
                     'Delivering joy through donated food, making hearts smile.',
-                onNext: () {
-                  context.go('/home_Screen');
-                },
+                onNext: () {},
                 isLastPage: true,
                 color: Color(0xFFE8E8E8),
               ),
@@ -94,9 +93,12 @@ class OnboardingScreenState extends State<OnboardingScreen> {
               child: SizedBox(
                 child: currentPageIndex != 3
                     ? SizedBox(
-                        width: 100, height: 100, child: buildIndicators())
+                        width: 100,
+                        height: 100,
+                        child: buildIndicators(context),
+                      )
                     : SizedBox(
-                        width: 300,
+                        width: MediaQuery.of(context).size.width - 40,
                         height: 60,
                         child: buildGetStartedButton(context),
                       ),
@@ -108,7 +110,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget buildIndicators() {
+  Widget buildIndicators(BuildContext context) {
     return Visibility(
       visible: currentPageIndex != 3,
       child: ListView.builder(
@@ -137,10 +139,8 @@ class OnboardingScreenState extends State<OnboardingScreen> {
       visible: currentPageIndex == 3,
       child: Container(
         alignment: Alignment.center,
-        width: 304,
         height: 50,
         decoration: ShapeDecoration(
-          // color: const Color(0xFFE47343),
           color: Colors.deepOrange,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -148,7 +148,7 @@ class OnboardingScreenState extends State<OnboardingScreen> {
         ),
         child: InkWell(
           onTap: () {
-            context.go('/auth_screen');
+            context.go(RoutePaths.authScreen);
           },
           child: const Text(
             "Get Started",

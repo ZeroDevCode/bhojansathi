@@ -59,11 +59,11 @@ class _OTPScreenState extends State<OTPScreen> {
           BlocListener<UserRegisterBloc, UserRegisterState>(
             listener: (context, state) {
               if (state is UserRegistered) {
-                context.go('/home');
+                context.go('/user_type_screen');
                 dev.log("UserRegistered", name: "UserRegistered");
               } else if (state is UserNotRegistered) {
                 dev.log("UserNotRegistered", name: "UserNotRegistered");
-                context.go('/user_register_screen');
+                context.go('/user_type_screen');
               } else if (state is GettingUser) {
                 showDialog(
                   context: context,
