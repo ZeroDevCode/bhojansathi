@@ -55,8 +55,7 @@ class _BaseScreenState extends State<BaseScreen> {
               label: 'Donate',
             ),
             NavigationDestination(
-              selectedIcon:
-                  Icon(Icons.bookmark_outline, color: Colors.white),
+              selectedIcon: Icon(Icons.bookmark_outline, color: Colors.white),
               icon: Icon(Icons.bookmark_border),
               label: 'History',
             ),

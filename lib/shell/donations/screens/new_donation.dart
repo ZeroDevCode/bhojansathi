@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class NewDonationScreen extends StatelessWidget {
   const NewDonationScreen({super.key});
 

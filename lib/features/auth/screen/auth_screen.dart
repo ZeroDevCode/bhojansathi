@@ -1,7 +1,6 @@
 import 'dart:developer' as dev;
 
 import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
-import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

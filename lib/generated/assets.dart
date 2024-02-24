@@ -12,5 +12,4 @@ class Assets {
   static const String usertypeIndividual = 'assets/usertype/individual.jpg';
   static const String usertypeOrganization = 'assets/usertype/organization.jpg';
   static const String usertypeVolunter = 'assets/usertype/volunter.jpg';
-
 }

@@ -29,7 +29,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
       await _authRepository.loginWithPhone(
         phoneNumber: event.phoneNumber,
         onVerificationCompleted: (PhoneAuthCredential phoneAuthCredential) {
-          add(OnPhoneAuthSuccessEvent());
+          add(const OnPhoneAuthSuccessEvent());
         },
         onVerificationFailed: (FirebaseAuthException firebaseAuthException) {
           add(OnPhoneAuthErrorEvent(firebaseAuthException.message ?? ''));

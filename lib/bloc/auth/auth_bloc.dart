@@ -21,7 +21,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final isSignedIn = await _authRepository.isSignedIn();
       if (isSignedIn) {
-        emit(Authenticated(phoneNo: await _authRepository.getUser() ?? 'Error'));
+        emit(
+            Authenticated(phoneNo: await _authRepository.getUser() ?? 'Error'));
       } else {
         emit(UnAuthenticated());
       }

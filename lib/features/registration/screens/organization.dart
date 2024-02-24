@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
 import 'package:bhojansathi/generated/assets.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 //organization profile create screen
 

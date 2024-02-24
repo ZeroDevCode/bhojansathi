@@ -135,7 +135,8 @@ class _RegistrationScreenState extends State<LoginScreen> {
                           ),
                           content: Row(
                             children: [
-                              CircularProgressIndicator(color: Colors.deepOrange),
+                              CircularProgressIndicator(
+                                  color: Colors.deepOrange),
                               SizedBox(
                                 width: 20,
                               ),
@@ -166,7 +167,7 @@ class _RegistrationScreenState extends State<LoginScreen> {
                       height: 45,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:Colors.deepOrange,
+                          backgroundColor: Colors.deepOrange,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

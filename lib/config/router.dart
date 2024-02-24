@@ -1,7 +1,5 @@
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/features/auth/screen/auth_screen.dart';
-import 'package:bhojansathi/shell/home/history_screen.dart';
-import 'package:bhojansathi/shell/home/screens/home_screen.dart';
 import 'package:bhojansathi/features/login/screens/login_screen.dart';
 import 'package:bhojansathi/features/login/screens/otp_screen.dart';
 import 'package:bhojansathi/features/login/screens/user_register_screen.dart';
@@ -10,6 +8,8 @@ import 'package:bhojansathi/features/splash/screens/on_boarding.dart';
 import 'package:bhojansathi/shell/base/screens/base.dart';
 import 'package:bhojansathi/shell/chat/screens/chat.dart';
 import 'package:bhojansathi/shell/donations/screens/new_donation.dart';
+import 'package:bhojansathi/shell/home/history_screen.dart';
+import 'package:bhojansathi/shell/home/screens/home_screen.dart';
 import 'package:bhojansathi/shell/notification/screens/notification.dart';
 import 'package:bhojansathi/shell/profile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +113,7 @@ final router = GoRouter(
           path: RoutePaths.historyScreen,
           pageBuilder: (context, state) {
             return CustomTransitionPage(
-              child:const HistoryScreen(),
+              child: const HistoryScreen(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) => child,
             );

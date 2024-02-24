@@ -1,6 +1,5 @@
 import 'package:bhojansathi/features/registration/screens/individual.dart';
 import 'package:bhojansathi/features/registration/screens/organization.dart';
-import 'package:bhojansathi/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,7 +11,6 @@ class UserRegistrationScreen extends StatefulWidget {
 }
 
 class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
-
   String? role;
 
   // function to get user role from shared preferences
