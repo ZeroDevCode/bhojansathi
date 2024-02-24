@@ -177,7 +177,10 @@ class _RegistrationScreenState extends State<LoginScreen> {
                         },
                         child: const Text(
                           "Verify",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     );

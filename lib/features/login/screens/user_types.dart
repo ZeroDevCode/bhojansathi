@@ -1,3 +1,6 @@
+import 'package:bhojansathi/config/routePaths.dart';
+import 'package:bhojansathi/config/routePaths.dart';
+import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/generated/assets.dart';
 import 'package:bhojansathi/utils/helper.dart';
 import 'package:flutter/material.dart';
@@ -29,16 +32,14 @@ class _UserTypeScreenState extends State<UserTypeScreen> {
                   "Individual",
                   Assets.usertypeIndividual,
                   () {
-                    Helper.saveUserData('role', 'individual');
-                    context.go('/user_register_screen');
+                    GoRouter.of(context).push(RoutePaths.individualUserRegisterScreen);
                   },
                 ),
                 buildUserTypeButton(
                   "Organization",
                   Assets.usertypeOrganization,
                   () {
-                    Helper.saveUserData('role', 'organization');
-                    context.go('/user_register_screen');
+                    GoRouter.of(context).push(RoutePaths.organizationProfileCreateScreen);
                   },
                 ),
               ],
@@ -47,10 +48,7 @@ class _UserTypeScreenState extends State<UserTypeScreen> {
             buildUserTypeButton(
               "Volunteer",
               Assets.usertypeVolunter,
-              () {
-                Helper.saveUserData('role', 'volunteer');
-                context.go('/user_register_screen');
-              },
+              () {},
             ),
           ],
         ),

@@ -13,4 +13,7 @@ class RoutePaths {
   static const String newDonationScreen = '/newDonation';
   static const String profileScreen = '/profileScreen';
   static const String historyScreen = '/historyScreen';
+  static const String individualUserRegisterScreen = '/individualUserRegisterScreen';
+  static const String organizationProfileCreateScreen = '/organizationProfileCreateScreen';
+  static const String volunteerProfileCreateScreen = '/volunteerProfileCreateScreen';
 }

@@ -137,19 +137,19 @@ class OnboardingScreenState extends State<OnboardingScreen> {
   Widget buildGetStartedButton(BuildContext context) {
     return Visibility(
       visible: currentPageIndex == 3,
-      child: Container(
-        alignment: Alignment.center,
-        height: 50,
-        decoration: ShapeDecoration(
-          color: Colors.deepOrange,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+      child: InkWell(
+        onTap: (){
+          context.go(RoutePaths.loginScreen);
+        },
+        child: Container(
+          alignment: Alignment.center,
+          height: 50,
+          decoration: ShapeDecoration(
+            color: Colors.deepOrange,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
-        ),
-        child: InkWell(
-          onTap: () {
-            context.go(RoutePaths.loginScreen);
-          },
           child: const Text(
             "Get Started",
             textAlign: TextAlign.center,

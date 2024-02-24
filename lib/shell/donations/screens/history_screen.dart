@@ -1,3 +1,4 @@
+import 'package:bhojansathi/generated/assets.dart';
 import 'package:flutter/material.dart';
 
 class HistoryScreen extends StatelessWidget {
@@ -11,6 +12,9 @@ class HistoryScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('History'),
           bottom: const TabBar(
+            indicatorColor: Colors.deepOrange,
+            labelColor: Colors.deepOrange,
+            unselectedLabelColor: Colors.black,
             tabs: [
               Tab(
                 text: 'Donations',
@@ -31,9 +35,14 @@ class HistoryScreen extends StatelessWidget {
                 itemCount: 10,
                 itemBuilder: (context, index) {
                   return const ListTile(
+                    leading:CircleAvatar(
+                      radius: 25,
+                      backgroundImage: AssetImage(Assets.assetsLogo),
+
+                    ),
                     title: Text('Donation'),
                     subtitle: Text('Donation'),
-                    trailing: Icon(Icons.arrow_forward_ios),
+                    trailing: Icon(Icons.info_outline),
                   );
                 },
               ),
