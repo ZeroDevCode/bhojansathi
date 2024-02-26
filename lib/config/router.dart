@@ -72,6 +72,15 @@ final router = GoRouter(
       path: RoutePaths.organizationProfileCreateScreen,
       builder: (context, state) => const OrganizationProfileCreateScreen(),
     ),
+    GoRoute(
+      // parentNavigatorKey: _shellNavigatorKey,
+      path: RoutePaths.newDonationScreen,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const NewDonationScreen(),
+        transitionsBuilder:
+            (context, animation, secondaryAnimation, child) => child,
+      ),
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
@@ -92,15 +101,6 @@ final router = GoRouter(
           path: RoutePaths.chatScreen,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: const Chat(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) => child,
-          ),
-        ),
-        GoRoute(
-          parentNavigatorKey: _shellNavigatorKey,
-          path: RoutePaths.newDonationScreen,
-          pageBuilder: (context, state) => CustomTransitionPage(
-            child: const NewDonationScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) => child,
           ),

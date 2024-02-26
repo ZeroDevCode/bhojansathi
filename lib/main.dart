@@ -1,8 +1,10 @@
 import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
+import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
 import 'package:bhojansathi/bloc/login/login_bloc.dart';
 import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
 import 'package:bhojansathi/config/router.dart';
 import 'package:bhojansathi/repositories/auth/auth_repository.dart';
+import 'package:bhojansathi/repositories/dontation/donation_repository.dart';
 import 'package:bhojansathi/repositories/user_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +39,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => UserRegisterBloc(userRepository: userRepository),
         ),
+        BlocProvider(
+          create: (context) =>
+              FoodDonationBloc(donationRepository: DonationRepository()),
+        ),
       ],
       child: MaterialApp.router(
         theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),

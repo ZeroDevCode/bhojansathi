@@ -24,14 +24,16 @@ class _BaseScreenState extends State<BaseScreen> {
           animationDuration: const Duration(milliseconds: 500),
           onDestinationSelected: (int index) {
             setState(() {
-              selectedIndex = index;
+              if(index != 2) {
+                selectedIndex = index;
+              }
             });
             if (index == 0) {
               context.go(RoutePaths.baseScreen);
             } else if (index == 1) {
               context.go(RoutePaths.chatScreen);
             } else if (index == 2) {
-              context.go(RoutePaths.newDonationScreen);
+              context.push(RoutePaths.newDonationScreen);
             } else if (index == 3) {
               context.go(RoutePaths.historyScreen);
             } else if (index == 4) {

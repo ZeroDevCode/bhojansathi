@@ -1,25 +1,15 @@
 import 'dart:io';
 
+import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/generated/assets.dart';
+import 'package:bhojansathi/shell/chat/screens/chat_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:developer' as dev;
 
-void main() {
-  runApp(
-    MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        fontFamily: 'Poppins',
-        useMaterial3: true,
-      ),
-      home: const IndividualUserRegisterScreen(),
-    ),
-  );
-}
-
-// Donation app individual user registration screen
 class IndividualUserRegisterScreen extends StatefulWidget {
   const IndividualUserRegisterScreen({super.key});
 
@@ -30,20 +20,20 @@ class IndividualUserRegisterScreen extends StatefulWidget {
 
 class _IndividualUserRegisterScreenState
     extends State<IndividualUserRegisterScreen> {
-  ImagePicker? _picker;
+  final ImagePicker? _picker = ImagePicker();
   XFile? photo;
   String imagePath = "";
   final TextEditingController _nameController = TextEditingController(
-    text: "FirebaseAuth.instance.currentUser!.displayName" ?? "",
+    text: FirebaseAuth.instance.currentUser!.displayName ?? "",
   );
   final TextEditingController _phoneNumberController = TextEditingController(
-    text: "FirebaseAuth.instance.currentUser!.phoneNumber" ?? "",
+    text: FirebaseAuth.instance.currentUser!.phoneNumber ?? "",
   );
   final TextEditingController _emailController = TextEditingController(
-    text: "FirebaseAuth.instance.currentUser!.email" ?? "",
+    text: FirebaseAuth.instance.currentUser!.email ?? "",
   );
   final TextEditingController _addressController = TextEditingController(
-    text: "FirebaseAuth.instance.currentUser!.email" ?? "",
+    text: FirebaseAuth.instance.currentUser!.email ?? "",
   );
   final TextEditingController _userRole = TextEditingController(
     text: "individual",
@@ -210,7 +200,9 @@ class _IndividualUserRegisterScreenState
                     50,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  context.go(RoutePaths.baseScreen);
+                },
                 child: const Text(
                   'Register',
                   style: TextStyle(
@@ -247,7 +239,9 @@ class _IndividualUserRegisterScreenState
                 ),
                 title: const Text("Camera"),
                 onTap: () async {
-                  photo  = await _picker!.pickImage(source: ImageSource.camera);
+                  photo = await _picker!.pickImage(source: ImageSource.camera);
+                  dev.log(name: 'Hello', photo!.path);
+                  setState(() {});
                   imagePath = photo!.path;
                   Navigator.pop(context);
                 },
@@ -263,7 +257,10 @@ class _IndividualUserRegisterScreenState
                 ),
                 title: const Text("Gallery"),
                 onTap: () async {
-
+                  photo = await _picker!.pickImage(source: ImageSource.gallery);
+                  dev.log(name: 'Hello', photo!.path);
+                  setState(() {});
+                  imagePath = photo!.path;
                   Navigator.pop(context);
                 },
               ),
