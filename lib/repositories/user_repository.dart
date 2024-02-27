@@ -3,7 +3,7 @@ import 'dart:developer' as dev;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import '../models/user_model.dart';
+import '../models/UserModel.dart';
 
 class UserRepository {
   UserRepository({

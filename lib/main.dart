@@ -47,8 +47,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         theme: ThemeData(
           primarySwatch: Colors.deepOrange,
+          backgroundColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
+          appBarTheme: AppBarTheme(
+            elevation: 2,
+          ),
           fontFamily: GoogleFonts.poppins().fontFamily,
         ),
         routerConfig: router,

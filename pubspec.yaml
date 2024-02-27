@@ -54,6 +54,9 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   file_picker:
   image_picker: ^1.0.7
+  geolocator: ^11.0.0
+  permission_handler: ^11.3.0
+  intl: ^0.18.1
 
 
 

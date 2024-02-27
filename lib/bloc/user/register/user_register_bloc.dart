@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as dev;
 
-import 'package:bhojansathi/models/user_model.dart';
+import 'package:bhojansathi/models/UserModel.dart';
 import 'package:bhojansathi/repositories/user_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

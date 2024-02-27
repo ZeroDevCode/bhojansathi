@@ -22,7 +22,7 @@ class UpdateFoodDonationEvent extends FoodDonationEvent {
 }
 
 class DeleteFoodDonationEvent extends FoodDonationEvent {
-  final FoodDonationModel foodDonationModel;
+  final String foodDonationId;
 
-  const DeleteFoodDonationEvent({required this.foodDonationModel});
+  const DeleteFoodDonationEvent({required this.foodDonationId});
 }

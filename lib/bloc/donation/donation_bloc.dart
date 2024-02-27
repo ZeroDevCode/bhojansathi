@@ -58,7 +58,7 @@ class FoodDonationBloc extends Bloc<FoodDonationEvent, FoodDonationState> {
     try {
       emit(DonationLoadingState());
       await _dontationRepository
-          .deleteFoodDonation(event.foodDonationModel.foodDonationID!);
+          .deleteFoodDonation(event.foodDonationId);
       emit(DonationOperationSucessState());
     } catch (e) {
       emit(DonationErrorState(message: e.toString()));
