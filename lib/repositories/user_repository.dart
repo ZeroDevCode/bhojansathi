@@ -9,11 +9,9 @@ class UserRepository {
   UserRepository({
     FirebaseFirestore? firestore,
     FirebaseStorage? storage,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _storage = storage ?? FirebaseStorage.instance;
+  })  : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
-  final FirebaseStorage _storage;
 
   Future<UserModel?> registerUser(UserModel user) async {
     try {

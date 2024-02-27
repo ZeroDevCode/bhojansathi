@@ -21,8 +21,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final FoodDonationBloc _foodDonationBlock =
-        BlocProvider.of<FoodDonationBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('History'),

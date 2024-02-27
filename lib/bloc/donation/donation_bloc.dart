@@ -40,8 +40,6 @@ class FoodDonationBloc extends Bloc<FoodDonationEvent, FoodDonationState> {
       AddFoodDonationEvent event, Emitter<FoodDonationState> emit) async {
     try {
       emit(DonationLoadingState());
-      final donation =
-          await _dontationRepository.addFoodDonation(event.foodDonationModel);
       emit(DonationOperationSucessState());
     } catch (e) {
       emit(DonationErrorState(message: e.toString()));

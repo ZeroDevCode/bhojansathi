@@ -1,6 +1,5 @@
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/generated/assets.dart';
-import 'package:bhojansathi/utils/style.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

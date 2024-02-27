@@ -27,7 +27,6 @@ class _BaseScreenState extends State<BaseScreen> {
           animationDuration: const Duration(milliseconds: 500),
           onDestinationSelected: (int index) {
             final GoRouterState router = GoRouterState.of(context);
-            final String location = router.matchedLocation;
             setState(() {
               if(index != 2) {
                 selectedIndex = index;
