@@ -9,6 +9,17 @@ abstract class UserRegisterState extends Equatable {
 
 class UserRegisterInitial extends UserRegisterState {}
 
+class UserLoadingState extends UserRegisterState {}
+
+class UserLoadedState extends UserRegisterState {
+  final UserModel user;
+
+  const UserLoadedState({required this.user});
+
+  @override
+  List<Object> get props => [user];
+}
+
 class UserRegistering extends UserRegisterState {}
 
 class UserRegistered extends UserRegisterState {
@@ -17,9 +28,7 @@ class UserRegistered extends UserRegisterState {
   final UserModel user;
 
   @override
-  List<Object> get props => [
-        user,
-      ];
+  List<Object> get props => [user];
 }
 
 class UserNotRegistered extends UserRegisterState {}

@@ -198,7 +198,7 @@ class HomePage extends StatelessWidget {
 
 Widget _buildDonationList(BuildContext context) {
   return SizedBox(
-    height: 400,
+    height: 345,
     child: ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
@@ -264,17 +264,6 @@ Widget _buildDonationList(BuildContext context) {
                 'The more contributions fundraisers bring in, the bigger the impact. And today, it’s easier than ever to donate to a charity.',
                 textAlign: TextAlign.justify,
               ),
-              Wrap(
-                crossAxisAlignment: WrapCrossAlignment.start,
-                verticalDirection: VerticalDirection.down,
-                spacing: 10,
-                alignment: WrapAlignment.start,
-                children: [
-                  _buildChip(
-                      'Exp - 1 Hour', Icons.access_time_outlined),
-                  _buildChip('2Kms', Icons.location_on_outlined),
-                ],
-              ),
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
@@ -285,7 +274,7 @@ Widget _buildDonationList(BuildContext context) {
                   ),
                 ),
                 child: const Text(
-                  'Donate Now',
+                  'Accept Donation',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

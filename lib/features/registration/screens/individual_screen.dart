@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/generated/assets.dart';
-import 'package:bhojansathi/shell/chat/screens/chat_screen.dart';
+import 'package:bhojansathi/shell/chat/screens/chat_list_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +138,7 @@ class _IndividualUserRegisterScreenState
                 ),
               ),
               const SizedBox(height: 20),
-              TextFormField(
+              TextField(
                 controller: _phoneNumberController,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',

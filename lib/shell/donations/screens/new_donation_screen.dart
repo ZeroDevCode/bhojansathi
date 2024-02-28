@@ -16,9 +16,8 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NewDonationScreen extends StatefulWidget {
-  final String donationId;
 
-  const NewDonationScreen({super.key, required this.donationId});
+  const NewDonationScreen({super.key});
 
   @override
   State<NewDonationScreen> createState() => _NewDonationScreenState();

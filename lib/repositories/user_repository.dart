@@ -1,5 +1,6 @@
 import 'dart:developer' as dev;
 
+import 'package:bhojansathi/models/OrganizationModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -9,30 +10,10 @@ class UserRepository {
   UserRepository({
     FirebaseFirestore? firestore,
     FirebaseStorage? storage,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance;
+  }) : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
 
-  Future<UserModel?> registerUser(UserModel user) async {
-    try {
-      // Ensure that user.userId is not empty or null
-      if (user.userId.isNotEmpty) {
-        await _firestore.collection('users').doc(user.userId).set({
-          'first_name': user.firstName,
-          'last_name': user.lastName,
-          'email': user.email,
-        });
-
-        return user;
-      } else {
-        dev.log('Error: Empty or null userId', name: 'User');
-        return null;
-      }
-    } catch (e) {
-      dev.log('Got registration error: $e', name: 'User');
-      return null;
-    }
-  }
 
   Future<UserModel?> updateUser(UserModel user) async {
     try {
@@ -51,13 +32,53 @@ class UserRepository {
   Stream<UserModel?> getUserStream(String userId) {
     return _firestore.collection('users').doc(userId).snapshots().map((event) {
       final data = event.data();
-
       if (data != null) {
         var user = UserModel.fromMap(data);
         return user;
       }
-
       return null;
     });
+  }
+
+  Future<UserModel?> createUser(UserModel user) async {
+    try {
+      await _firestore.collection('users').doc(user.userId).set(user.toMap());
+    } catch (e) {
+      dev.log('Got error in creating user: $e', name: 'User');
+      rethrow;
+    }
+    return null;
+  }
+
+  Future<void> deleteUser(String userId) async {
+    try {
+      await _firestore.collection('users').doc(userId).delete();
+    } catch (e) {
+      dev.log('Got error in deleting user: $e', name: 'User');
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserField(
+      String userId, String field, String value) async {
+    try {
+      await _firestore.collection('users').doc(userId).update({field: value});
+    } catch (e) {
+      dev.log('Got error in updating user field: $e', name: 'User');
+      rethrow;
+    }
+  }
+
+  Future<void> registerOrganization(
+      String userId, OrganizationModel organizationModel) async {
+    try {
+      await _firestore
+          .collection('organizations')
+          .doc(userId)
+          .set(organizationModel.toMap());
+    } catch (e) {
+      dev.log('Got error in registering organization: $e', name: 'User');
+      rethrow;
+    }
   }
 }

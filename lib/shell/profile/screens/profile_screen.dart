@@ -76,30 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ListTile(
                 visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
                 title: const Text('My Donations'),
-                leading: const Icon(Icons.bookmark_outline),
+                leading: const Icon(Icons.handshake_outlined),
                 onTap: () {
                  context.push(RoutePaths.profileMyDonationScreen);
                 },
               ),
-              const Divider(),
-              ListTile(
-                visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                title: const Text('My Requests'),
-                leading: const Icon(Icons.bookmark_outline),
-                onTap: () {
-                  //go to my requests
-                },
-              ),
-              const Divider(),
-              ListTile(
-                visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-                title: const Text('My Live'),
-                leading: const Icon(Icons.bookmark_outline),
-                onTap: () {
-                  //go to my live
-                },
-              ),
-              const Divider(),
             ],
           ),
         ));

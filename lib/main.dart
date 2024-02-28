@@ -6,6 +6,7 @@ import 'package:bhojansathi/config/router.dart';
 import 'package:bhojansathi/repositories/auth/auth_repository.dart';
 import 'package:bhojansathi/repositories/dontation/donation_repository.dart';
 import 'package:bhojansathi/repositories/user_repository.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate(
+    webProvider:
+        ReCaptchaV3Provider('AIzaSyCsNPOr42NMDcc4eBwVtXyGJkrTAMcyZKw'),
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.debug,
   );
   runApp(const MyApp());
 }
@@ -49,7 +56,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepOrange,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           useMaterial3: true,
-          appBarTheme: AppBarTheme(
+          appBarTheme: const AppBarTheme(
             elevation: 2,
           ),
           fontFamily: GoogleFonts.poppins().fontFamily,

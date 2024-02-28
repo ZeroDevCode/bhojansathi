@@ -70,7 +70,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             child: Text('Edit'),
                             onTap: (){
                               context.push(
-                                RoutePaths.editDonationScreen + donation[index].foodDonationID,
+                              '${RoutePaths.editDonationScreen}/${donation[index].foodDonationID}',
                               );
                             },
                           ),

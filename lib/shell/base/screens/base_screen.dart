@@ -26,7 +26,6 @@ class _BaseScreenState extends State<BaseScreen> {
           elevation: 20,
           animationDuration: const Duration(milliseconds: 500),
           onDestinationSelected: (int index) {
-            final GoRouterState router = GoRouterState.of(context);
             setState(() {
               if(index != 2) {
                 selectedIndex = index;
@@ -56,8 +55,8 @@ class _BaseScreenState extends State<BaseScreen> {
               label: 'Chat',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.edit_outlined, color: Colors.white),
-              icon: Icon(Icons.edit_outlined),
+              selectedIcon: Icon(Icons.handshake_outlined, color: Colors.white),
+              icon: Icon(Icons.handshake_outlined),
               label: 'Donate',
             ),
             NavigationDestination(
