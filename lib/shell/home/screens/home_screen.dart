@@ -1,5 +1,6 @@
 import 'package:bhojansathi/common/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -133,7 +134,8 @@ class HomePage extends StatelessWidget {
                               ],
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () =>
+                                  context.go("/detailDonationScreen"),
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(double.infinity, 40),
                                 backgroundColor: Colors.deepOrange,
