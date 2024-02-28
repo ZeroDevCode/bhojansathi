@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ChatViewScreen extends StatelessWidget {
-  const ChatViewScreen({super.key});
+  final String chatId;
+  const ChatViewScreen({super.key, required this.chatId});
 
   @override
   Widget build(BuildContext context) {

@@ -9,6 +9,7 @@ import 'package:bhojansathi/features/registration/screens/organization_screen.da
 import 'package:bhojansathi/features/splash/screens/on_boarding.dart';
 import 'package:bhojansathi/shell/base/screens/base_screen.dart';
 import 'package:bhojansathi/shell/chat/screens/chat_list_screen.dart';
+import 'package:bhojansathi/shell/chat/screens/open_chat_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/donation_edit_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/new_donation_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/donation_history_screen.dart';
@@ -90,7 +91,15 @@ final router = GoRouter(
       pageBuilder: (context, state) => CustomTransitionPage(
         child: DonationEditScreen(donationId: state.pathParameters['id']!),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-        child,
+            child,
+      ),
+    ),
+    GoRoute(
+      path: RoutePaths.chatDetailScreen,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: ChatViewScreen(chatId: state.pathParameters['id']!),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            child,
       ),
     ),
     ShellRoute(
