@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
@@ -60,6 +61,7 @@ class _ChatState extends State<Chat> {
             title: Text(users[index]),
             subtitle: Text(messages[index]),
             trailing: Text(times[index]),
+            onTap: () => context.push("/chatViewScreen"),
           );
         },
       ),
