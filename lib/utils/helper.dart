@@ -20,5 +20,21 @@ class Helper {
     const DropdownMenuEntry(value: 'Meal', label: "Meal"),
   ];
 
+  static scaffoldMessenger(String message, BuildContext context){
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        margin: const EdgeInsets.all(10),
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        dismissDirection: DismissDirection.horizontal,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        content: const Text(
+            'Please fill all the fields or minimum 3 images are required.'),
+        backgroundColor: Colors.black.withOpacity(0.8),
+      ),
+    );
+  }
 
 }

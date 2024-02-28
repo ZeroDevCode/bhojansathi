@@ -6,6 +6,7 @@ import 'package:bhojansathi/shell/chat/screens/chat_list_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer' as dev;
@@ -60,7 +61,8 @@ class _IndividualUserRegisterScreenState
           ),
         ],
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
@@ -140,6 +142,10 @@ class _IndividualUserRegisterScreenState
               const SizedBox(height: 20),
               TextField(
                 controller: _phoneNumberController,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
                   border: OutlineInputBorder(

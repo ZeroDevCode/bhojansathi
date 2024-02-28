@@ -16,7 +16,6 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NewDonationScreen extends StatefulWidget {
-
   const NewDonationScreen({super.key});
 
   @override
@@ -372,61 +371,33 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                       value: isCurrentLocation,
                       onChanged: (bool value) async {
                         if (value) {
-                          final status =
-                              await Permission.location.serviceStatus.isEnabled;
-                          if (status == true) {
-                            if (context.mounted) {
-                              showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return const AlertDialog(
-                                    content: Row(
-                                      children: [
-                                        CircularProgressIndicator(),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Text('Getting Location...'),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            }
+                          final status = await Permission.location.request();
+                          if (status.isGranted) {
                             final position =
                                 await Geolocator.getCurrentPosition(
                               desiredAccuracy: LocationAccuracy.high,
                             );
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
+                            print(position.latitude);
                             latitude = position.latitude.toInt();
                             longitude = position.longitude.toInt();
                             setState(() {
                               isCurrentLocation = value;
+                              _locationController.text =
+                                  'Latitude: $latitude, Longitude: $longitude';
                             });
                           } else {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: const Text(
-                                      'Location permission is not granted'),
-                                  backgroundColor: Colors.red,
-                                  action: SnackBarAction(
-                                    label: 'Enable Gps',
-                                    onPressed: () async {
-                                      await Geolocator.openLocationSettings();
-                                    },
-                                  ),
-                                ),
-                              );
-                            }
+                            Helper.scaffoldMessenger(
+                              'Location permission is required to get current location',
+                              context,
+                            );
                           }
                         } else {
-                          setState(() {
-                            isCurrentLocation = value;
-                          });
+                          setState(
+                            () {
+                              isCurrentLocation = value;
+                              _locationController.clear();
+                            },
+                          );
                         }
                       },
                     ),
@@ -459,7 +430,7 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                   ),
                   onPressed: () {
                     dev.log(images.length.toString(), name: 'Donation');
-                    if (images.length < 2 &&
+                    if (images.length > 2 &&
                         _formKey.currentState!.validate() &&
                         _typeController.text != 'Select Category') {
                       final donation = FoodDonationModel(
@@ -493,11 +464,9 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                         AddFoodDonationEvent(foodDonationModel: donation),
                       );
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please fill all the fields'),
-                          backgroundColor: Colors.red,
-                        ),
+                      Helper.scaffoldMessenger(
+                        'Please fill all the fields or minimum 3 images are required.',
+                        context,
                       );
                     }
                   },
