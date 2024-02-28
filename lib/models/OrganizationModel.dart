@@ -42,4 +42,17 @@ class OrganizationModel {
     data['id'] = id;
     return data;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'address': address,
+      'phone': phone,
+      'email': email,
+      'website': website,
+      'logo': logo,
+      'description': description,
+      'id': id,
+    };
+  }
 }

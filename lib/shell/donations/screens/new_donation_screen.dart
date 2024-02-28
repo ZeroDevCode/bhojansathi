@@ -3,28 +3,32 @@
 import 'dart:io';
 
 import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
-import 'package:bhojansathi/generated/assets.dart';
 import 'package:bhojansathi/models/DonationModel.dart';
+import 'package:bhojansathi/utils/helper.dart';
+import 'package:bhojansathi/utils/style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer' as dev;
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NewDonationScreen extends StatefulWidget {
+
   const NewDonationScreen({super.key});
 
   @override
-  _NewDonationScreenState createState() {
-    return _NewDonationScreenState();
-  }
+  State<NewDonationScreen> createState() => _NewDonationScreenState();
 }
 
 class _NewDonationScreenState extends State<NewDonationScreen> {
   final picker = ImagePicker();
   final images = <String>[];
-
+  bool isCurrentLocation = false;
+  var latitude = 0;
+  var longitude = 0;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _typeController = TextEditingController();
@@ -35,6 +39,11 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
   final _contactNumberController = TextEditingController(
     text: FirebaseAuth.instance.currentUser?.phoneNumber ?? '',
   );
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,14 +100,14 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
             child: ListView(
               children: <Widget>[
                 const Text(
-                  ' Add Images',
+                  'Add Images',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const Text(
-                  "  you can add upto 5 images",
+                  "you can add upto 5 images (minimum 1) of the food you want to donate.",
                   style: TextStyle(
                     fontSize: 12,
                   ),
@@ -106,7 +115,9 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                 SizedBox(
                   height: 150,
                   child: ListView.builder(
+                    cacheExtent: 100,
                     shrinkWrap: true,
+                    reverse: images.isEmpty ? false : true,
                     scrollDirection: Axis.horizontal,
                     itemCount:
                         images.length < 5 ? images.length + 1 : images.length,
@@ -120,7 +131,8 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                         },
                         child: Container(
                           width: 180,
-                          margin: const EdgeInsets.all(5),
+                          margin: const EdgeInsets.only(
+                              top: 5, bottom: 5, right: 10),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.black12,
@@ -153,87 +165,172 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                 ),
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    isDense: true,
+                  decoration: MyStyle.outlinedTextStyle.copyWith(
                     labelText: 'Name',
                     hintText: 'Enter the name of the food',
                   ),
+                  style: const TextStyle(
+                    height: 1.5,
+                    fontSize: 12,
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter the name of the food';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
                   controller: _descriptionController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    isDense: true,
+                  decoration: MyStyle.outlinedTextStyle.copyWith(
                     labelText: 'about the food donation',
                     hintText: 'Enter the name of the food',
                   ),
+                  style: const TextStyle(
+                    height: 1.5,
+                    fontSize: 12,
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter the description of the food';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-
-                TextFormField(
-                  controller: _typeController,
-                  decoration: const InputDecoration(
+                DropdownMenu(
+                  dropdownMenuEntries: Helper.dropdonwMenuEntries,
+                  initialSelection: 'Select Category',
+                  width: MediaQuery.of(context).size.width - 32,
+                  onSelected: (value) {
+                    _typeController.text = value;
+                    setState(() {});
+                  },
+                  menuStyle: const MenuStyle(
+                    visualDensity: VisualDensity(
+                      horizontal: 0,
+                      vertical: -2,
+                    ),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 12,
+                  ),
+                  inputDecorationTheme: const InputDecorationTheme(
                     border: OutlineInputBorder(),
                     isDense: true,
-                    labelText: 'Type',
-                    hintText: 'Enter the type of the food',
+                    contentPadding: EdgeInsets.all(10),
+                    labelStyle: TextStyle(fontSize: 12),
+                    hintStyle: TextStyle(fontSize: 12),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _quantityController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                    labelText: 'Quantity',
-                    hintText: 'Enter the quantity of the food',
+                const SizedBox(height: 10),
+                AbsorbPointer(
+                  absorbing:
+                      _typeController.text != 'Select Category' ? false : true,
+                  child: TextFormField(
+                    controller: _quantityController,
+                    decoration: MyStyle.outlinedTextStyle.copyWith(
+                      labelText: _typeController.text == 'Select Category'
+                          ? 'Select Category first'
+                          : _typeController.text == 'Raw'
+                              ? 'Enter the quantity in KG'
+                              : _typeController.text == 'Meal'
+                                  ? 'Enter the no of meals'
+                                  : 'Select category first',
+                      hintText: _typeController.text == 'Select Category'
+                          ? _typeController.text
+                          : _typeController.text == 'Raw'
+                              ? 'Enter the quantity in KG'
+                              : _typeController.text == 'Meal'
+                                  ? 'Enter the no of meals'
+                                  : 'Select Category first',
+                    ),
+                    style: const TextStyle(
+                      height: 1.5,
+                      fontSize: 12,
+                    ),
+                    validator: (value) {
+                      if (_typeController.text == 'Select Category') {
+                        return 'Please enter the quantity of the food';
+                      }
+                      return null;
+                    },
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 SizedBox(
                   height: 60,
-                  child: Row(children: [
-                    Expanded(
-                      child: SelectionContainer.disabled(
-                        child: TextFormField(
-                          controller: _expiryDateController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            isDense: true,
-                            labelText: 'Expiry Date',
-                            hintText: 'Enter the expiry date of the food',
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AbsorbPointer(
+                          absorbing: true,
+                          child: TextFormField(
+                            controller: _expiryDateController,
+                            decoration: MyStyle.outlinedTextStyle.copyWith(
+                              labelText: 'Expiry Date',
+                              hintText: 'Enter the expiry date of the food',
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.date_range),
-                      onPressed: () async {
-                        final DateTime? picked = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2101),
-                        );
-                        if (picked != null) {
-                          setState(() {
-                            _expiryDateController.text =
-                                '0${picked.day}/${picked.month}/${picked.year}';
-                          });
-                        }
-                      },
-                    ),
-                  ]),
+                      IconButton(
+                        icon: const Icon(Icons.date_range),
+                        onPressed: () async {
+                          final DateTime? datePicker = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2101),
+                          );
+                          if (context.mounted) {
+                            if (datePicker != null) {
+                              final TimeOfDay? timePiker = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+                              if (timePiker != null) {
+                                setState(() {
+                                  DateTime temp = DateTime(
+                                    datePicker.year,
+                                    datePicker.month,
+                                    datePicker.day,
+                                    timePiker.hour,
+                                    timePiker.minute,
+                                  );
+                                  _expiryDateController.text = DateFormat(
+                                    'yyyy/MM/dd  HH:mm:ss a',
+                                  ).format(temp);
+                                  setState(() {});
+                                });
+                              } else {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please select the time'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please select the date'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -242,24 +339,111 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                   controller: _locationController,
                   maxLines: 2,
                   textAlign: TextAlign.start,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    isDense: true,
+                  decoration: MyStyle.outlinedTextStyle.copyWith(
                     labelText: 'Location',
                     alignLabelWithHint: true,
                     hintText: 'Enter the location of the food',
                   ),
+                  style: const TextStyle(
+                    height: 1.5,
+                    fontSize: 12,
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter the location of the food';
+                    }
+                    return null;
+                  },
+                ),
+                //switch to get current location
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      'Donation location is your location current?',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                    const Spacer(),
+                    Switch(
+                      value: isCurrentLocation,
+                      onChanged: (bool value) async {
+                        if (value) {
+                          final status =
+                              await Permission.location.serviceStatus.isEnabled;
+                          if (status == true) {
+                            if (context.mounted) {
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return const AlertDialog(
+                                    content: Row(
+                                      children: [
+                                        CircularProgressIndicator(),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text('Getting Location...'),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                            final position =
+                                await Geolocator.getCurrentPosition(
+                              desiredAccuracy: LocationAccuracy.high,
+                            );
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                            }
+                            latitude = position.latitude.toInt();
+                            longitude = position.longitude.toInt();
+                            setState(() {
+                              isCurrentLocation = value;
+                            });
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: const Text(
+                                      'Location permission is not granted'),
+                                  backgroundColor: Colors.red,
+                                  action: SnackBarAction(
+                                    label: 'Enable Gps',
+                                    onPressed: () async {
+                                      await Geolocator.openLocationSettings();
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        } else {
+                          setState(() {
+                            isCurrentLocation = value;
+                          });
+                        }
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
                   controller: _contactNumberController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    isDense: true,
+                  decoration: MyStyle.outlinedTextStyle.copyWith(
                     labelText: 'Contact Number',
                     hintText: 'Enter the contact number',
+                  ),
+                  style: const TextStyle(
+                    height: 1.5,
+                    fontSize: 12,
                   ),
                 ),
                 const SizedBox(
@@ -274,8 +458,10 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                     minimumSize: const Size(double.infinity, 50),
                   ),
                   onPressed: () {
-                    dev.log(images.toString(), name: 'Donation');
-                    if (_formKey.currentState!.validate()) {
+                    dev.log(images.length.toString(), name: 'Donation');
+                    if (images.length < 2 &&
+                        _formKey.currentState!.validate() &&
+                        _typeController.text != 'Select Category') {
                       final donation = FoodDonationModel(
                         foodName: _nameController.text,
                         foodType: _typeController.text,
@@ -291,19 +477,27 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                         foodDonorState: '',
                         foodDonorCountry: '',
                         foodDonorZipCode: '',
-                        foodDonorLatitude: '',
-                        foodDonorLongitude: '',
+                        foodDonorLatitude:
+                            isCurrentLocation ? latitude.toString() : '',
+                        foodDonorLongitude:
+                            isCurrentLocation ? longitude.toString() : '',
                         foodDonorUID:
                             FirebaseAuth.instance.currentUser?.uid ?? '',
                         foodDonationStatus: 'pending',
                         foodDonationDate: DateTime.now().toString(),
                         foodDonationTime: DateTime.now().toString(),
                         foodDonationID: DateTime.now().toString() +
-                                FirebaseAuth.instance.currentUser!.uid ??
-                            '',
+                            FirebaseAuth.instance.currentUser!.uid,
                       );
                       BlocProvider.of<FoodDonationBloc>(context).add(
                         AddFoodDonationEvent(foodDonationModel: donation),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill all the fields'),
+                          backgroundColor: Colors.red,
+                        ),
                       );
                     }
                   },

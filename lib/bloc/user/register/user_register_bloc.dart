@@ -35,17 +35,12 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
     Emitter<UserRegisterState> emit,
   ) async {
     emit(UserRegistering());
-
     try {
-      final user = await _userRepository.registerUser(event.user);
-
+      final user = await _userRepository.createUser(event.user);
       if (user == null) {
         emit(const UserRegisterError('Some error occurred!'));
       } else {
-        // Store user data in Firebase
         add(UpdateUser(user: user));
-
-        // Emit UserRegistered state
         emit(UserRegistered(user));
       }
     } on FirebaseException catch (e) {
@@ -60,7 +55,6 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
 
   void _onGetUser(GetUser event, Emitter<UserRegisterState> emit) async {
     emit(GettingUser());
-
     try {
       _userSubscription?.cancel();
       _userSubscription =

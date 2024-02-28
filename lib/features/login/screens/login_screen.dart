@@ -111,9 +111,6 @@ class _RegistrationScreenState extends State<LoginScreen> {
                 listener: (context, state) {
                   if (state.isOtpSent) {
                     context.go(RoutePaths.otpScreen);
-                    if (kDebugMode) {
-                      print(state.verificationId);
-                    }
                   } else if (state.isOtpError) {
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -136,7 +133,8 @@ class _RegistrationScreenState extends State<LoginScreen> {
                           content: Row(
                             children: [
                               CircularProgressIndicator(
-                                  color: Colors.deepOrange),
+                                color: Colors.deepOrange,
+                              ),
                               SizedBox(
                                 width: 20,
                               ),

@@ -52,8 +52,8 @@ class _BaseScreenState extends State<BaseScreen> {
               label: 'Chat',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.edit_outlined, color: Colors.white),
-              icon: Icon(Icons.edit_outlined),
+              selectedIcon: Icon(Icons.handshake_outlined, color: Colors.white),
+              icon: Icon(Icons.handshake_outlined),
               label: 'Donate',
             ),
             NavigationDestination(

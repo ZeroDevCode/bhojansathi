@@ -9,15 +9,14 @@ class RoutePaths {
   static const String authScreen = '/authScreen';
   static const String baseScreen = '/baseScreen';
   static const String chatScreen = '/chatScreen';
-  static const String chatViewScreen = '/chatViewScreen';
   static const String notificationScreen = '/notificationScreen';
   static const String newDonationScreen = '/newDonation';
   static const String profileScreen = '/profileScreen';
   static const String historyScreen = '/historyScreen';
-  static const String individualUserRegisterScreen =
-      '/individualUserRegisterScreen';
-  static const String organizationProfileCreateScreen =
-      '/organizationProfileCreateScreen';
-  static const String volunteerProfileCreateScreen =
-      '/volunteerProfileCreateScreen';
+  static const String individualUserRegisterScreen = '/individualUserRegisterScreen';
+  static const String organizationProfileCreateScreen = '/organizationProfileCreateScreen';
+  static const String volunteerProfileCreateScreen = '/volunteerProfileCreateScreen';
+  static const String profileMyDonationScreen = '/profileMyDonationScreen';
+  static const String editDonationScreen = '/editDonationScreen';
+  static const String donationDetailScreen = '/donationDetailScreen';
 }

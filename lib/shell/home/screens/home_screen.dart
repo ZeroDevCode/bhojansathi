@@ -1,6 +1,6 @@
 import 'package:bhojansathi/common/app_bar.dart';
+import 'package:bhojansathi/utils/style.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,216 +8,285 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white38,
-        appBar: const CustomAppBar(),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      "Hunger spots near you",
+      backgroundColor: Colors.white38,
+      appBar: const CustomAppBar(),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    "   Hunger spots near you",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Expanded(child: SizedBox()),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'See All',
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange,
+                        fontSize: 14,
                       ),
                     ),
-                    const Expanded(child: SizedBox()),
-                    TextButton(
-                      onPressed: () {
-                        // Handle See All button tap
-                      },
-                      child: const Text(
-                        'See All',
-                        style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontSize: 16,
-                        ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 365,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: 260,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 5,),
+                      decoration: MyStyle.containerDecoration,
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const CircleAvatar(
+                                radius: 20.0,
+                                backgroundImage: AssetImage(
+                                    'assets/images/ngo.png'), // Replace with actual image path
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Karan Chaudhuri',
+                                    style: MyStyle.textHeadingStyle,
+                                  ),
+                                  Text(
+                                    'Rajkot, Gujarat',
+                                    style: MyStyle.textSubHeadingStyle,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            height: 130,
+                            width: 260,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: Image.network(
+                                        "https://via.placeholder.com/100")
+                                    .image,
+                              ),
+                            ),
+                            child: Image.network(
+                              'https://via.placeholder.com/100',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            'The more contributions fundraisers bring in, the bigger the impact.'
+                                ' And today, it’s easier than ever to donate to a charity.',
+                            textAlign: TextAlign.justify,
+                            style: MyStyle.textSubHeadingStyle,
+                          ),
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            verticalDirection: VerticalDirection.down,
+                            spacing: 10,
+                            alignment: WrapAlignment.start,
+                            children: [
+                              _buildChip(
+                                  'Exp - 1 Hour', Icons.access_time_outlined),
+                              _buildChip('2Kms', Icons.location_on_outlined),
+                            ],
+                          ),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 40),
+                              backgroundColor: Colors.deepOrange,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text(
+                              'Donate Now',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  Text(
+                    "  Donations",
+                    style: MyStyle.textHeadingStyle.copyWith(
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Expanded(child: SizedBox()),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'See All',
+                      style: TextStyle(
+                        color: Colors.deepOrange,
+                        fontSize: 14,
                       ),
                     ),
+                  ),
+                ],
+              ),
+              _buildDonationList(context),
+              const SizedBox(height: 10),
+              Text(
+                '  Top NGO\'s',
+                style: MyStyle.textHeadingStyle.copyWith(fontSize: 16),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              const SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    NGOCircle(imageUrl: 'assets/images/ngo.png'),
+                    NGOCircle(imageUrl: 'assets/images/ngo2.jpg'),
+                    NGOCircle(imageUrl: 'assets/images/ngo3.jpg'),
+                    NGOCircle(imageUrl: 'assets/images/ngo4.jpg'),
+                    NGOCircle(imageUrl: 'assets/images/ngo.png'),
+                    NGOCircle(imageUrl: 'assets/images/ngo3.jpg'),
                   ],
                 ),
-                SizedBox(
-                  height: 470,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 275,
-                        height: 300,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              blurRadius: 5.0,
-                              spreadRadius: 2.0,
-                              offset: const Offset(0.0, 1.0),
-                            ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: 20.0,
-                                  backgroundImage: AssetImage(
-                                      'assets/images/ngo.png'), // Replace with actual image path
-                                ),
-                                SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Karan Chaudhary',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16.0,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Rajkot, Gujarat',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              clipBehavior: Clip.antiAlias,
-                              height: 150,
-                              width: double.infinity,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Image.asset(
-                                'assets/images/donate_food.jpg',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              'The more contributions fundraisers bring in, the bigger the impact. And today, it’s easier than ever to donate to a charity.',
-                              textAlign: TextAlign.justify,
-                            ),
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              verticalDirection: VerticalDirection.down,
-                              spacing: 10,
-                              alignment: WrapAlignment.start,
-                              children: [
-                                _buildChip(
-                                    'Exp - 1 Hour', Icons.access_time_outlined),
-                                _buildChip('2Kms', Icons.location_on_outlined),
-                                _buildChip('30', Icons.local_dining_outlined),
-                              ],
-                            ),
-                            ElevatedButton(
-                              onPressed: () =>
-                                  context.go("/detailDonationScreen"),
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(double.infinity, 40),
-                                backgroundColor: Colors.deepOrange,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: const Text(
-                                'Donate Now',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget _buildDonationList(BuildContext context) {
+  return SizedBox(
+    height: 345,
+    child: ListView.builder(
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: 5,
+      physics: const BouncingScrollPhysics(),
+      itemBuilder: (context, index) {
+        return Container(
+          width: 260,
+          margin: const EdgeInsets.symmetric(
+              vertical: 0, horizontal: 5),
+          decoration: MyStyle.containerDecoration,
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: AssetImage(
+                        'assets/images/ngo.png'), // Replace with actual image path
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Karan Chaudhary',
+                        style: MyStyle.textHeadingStyle,
+                      ),
+                      Text(
+                        'Rajkot, Gujarat',
+                        style: MyStyle.textSubHeadingStyle,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                height: 130,
+                width: 260,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: Image.network(
+                        "https://via.placeholder.com/100")
+                        .image,
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage: AssetImage('assets/images/ngo.png'),
-                    ),
-                    SizedBox(width: 10.0),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Karan Chaudhary',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        // Text(
-                        //   'Rajkot, Gujarat',
-                        //   style: TextStyle(
-                        //     color: Colors.grey,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                    Spacer(),
-                    Icon(Icons.more_horiz),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Image.asset(
-                  'assets/images/donate.jpg', // Replace with actual image path
-                  height: 300.0,
+                child: Image.network(
+                  'https://via.placeholder.com/100',
                   fit: BoxFit.cover,
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Top NGO\'s',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
-                ),
-                const SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      NGOCircle(imageUrl: 'assets/images/ngo.png'),
-                      NGOCircle(imageUrl: 'assets/images/ngo2.jpg'),
-                      NGOCircle(imageUrl: 'assets/images/ngo3.jpg'),
-                      NGOCircle(imageUrl: 'assets/images/ngo4.jpg'),
-                      NGOCircle(imageUrl: 'assets/images/ngo.png'),
-                      NGOCircle(imageUrl: 'assets/images/ngo3.jpg'),
-                    ],
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'The more contributions fundraisers bring in, the bigger the impact. And today, it’s easier than ever to donate to a charity.',
+                textAlign: TextAlign.justify,
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 40),
+                  backgroundColor: Colors.deepOrange,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-              ],
-            ),
+                child: const Text(
+                  'Accept Donation',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ));
-  }
+        );
+      },
+    ),
+  );
 }
 
 Widget _buildChip(String label, IconData icon) {

@@ -4,28 +4,33 @@ class UserModel extends Equatable {
   final String userId;
   final String firstName;
   final String lastName;
-  final String? email;
+  final String? phoneNumber;
+  final String? role;
 
   const UserModel({
     required this.userId,
     required this.firstName,
     required this.lastName,
-    this.email,
+    required this.phoneNumber,
+    required this.role,
   });
 
   @override
-  List<Object?> get props => [userId, firstName, lastName, email];
+  List<Object?> get props => [userId, firstName, lastName, phoneNumber];
 
   UserModel copyWith({
+    String? userId,
     String? firstName,
     String? lastName,
-    String? email,
+    String? phoneNumber,
+    String? role,
   }) {
     return UserModel(
-      userId: this.userId,
+      userId: userId ?? this.userId,
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
-      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      role: role ?? this.role,
     );
   }
 
@@ -34,7 +39,8 @@ class UserModel extends Equatable {
       'userId': userId,
       'first_name': firstName,
       'lastName': lastName, // Change this field to match Firestore document
-      'email': email ?? '',
+      'phoneNumber': phoneNumber ?? '',
+      'role': role ?? '',
     };
   }
 
@@ -42,9 +48,9 @@ class UserModel extends Equatable {
     return UserModel(
       userId: map['userId'] as String,
       firstName: map['first_name'] as String,
-      lastName: map['lastName']
-          as String, // Change this field to match Firestore document
-      email: map['email'] as String?,
+      lastName: map['lastName'] as String,
+      phoneNumber: map['phoneNumber'] as String?,
+      role: map['role'] as String?,
     );
   }
 }
