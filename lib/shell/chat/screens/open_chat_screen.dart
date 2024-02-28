@@ -23,72 +23,52 @@ class ChatViewScreen extends StatelessWidget {
                 child: ListView.builder(
                   reverse: true,
                   itemCount: 20,
+                  shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return index % 2 == 0
-                        ? Container(
-                            margin: EdgeInsets.fromLTRB(
-                                2.5, 2.5, size.width * 0.3, 2.5),
-                            width: size.width * 0.65,
-                            child: Card(
-                              elevation: 3.0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: 35.0,
-                                      width: 35.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: const DecorationImage(
-                                          image: NetworkImage(
-                                            'https://pbs.twimg.com/profile_images/916384996092448768/PF1TSFOE_400x400.jpg',
-                                          ),
-                                        ),
-                                        border: Border.all(
-                                          color: const Color(0xff025f7f),
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5.0),
-                                    SizedBox(
-                                      width: size.width * 0.65 - 43.0,
-                                      child: const Text(
-                                        'Hii Laude',
-                                        textAlign: TextAlign.justify,
-                                        style: TextStyle(fontSize: 13.5),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                    return UnconstrainedBox(
+                      alignment: index % 2 == 0
+                          ? Alignment.topLeft
+                          : Alignment.topRight,
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: 250),
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.2),
+                          ),
+                        ),
+                        margin: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Karan",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
-                        : Container(
-                            margin: EdgeInsets.fromLTRB(
-                                size.width * 0.3, 2.5, 2.5, 2.5),
-                            width: size.width * 0.65,
-                            child: Card(
-                              color: Colors.blue[50],
-                              elevation: 3.0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  'Hii lund',
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(fontSize: 13.5),
-                                ),
-                              ),
+                            Divider(
+                              height: 5,
                             ),
-                          );
+                            Text(
+                              "This the message from karan lodu bhagat to make this bhojan sathi",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                "10:10 PM",
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
