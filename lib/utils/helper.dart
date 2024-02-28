@@ -1,4 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+
 
 class Helper {
   static Future<bool> saveUserData(key, value) async {
@@ -11,4 +13,12 @@ class Helper {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.getString(value) as String;
   }
+
+  static List<DropdownMenuEntry> dropdonwMenuEntries = [
+    const DropdownMenuEntry(label: 'Select Category', value: 'Select Category'),
+    const DropdownMenuEntry(value: 'Raw', label: "Raw Material"),
+    const DropdownMenuEntry(value: 'Meal', label: "Meal"),
+  ];
+
+
 }

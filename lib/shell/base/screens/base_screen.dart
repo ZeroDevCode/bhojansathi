@@ -21,6 +21,9 @@ class _BaseScreenState extends State<BaseScreen> {
         bottomNavigationBar: NavigationBar(
           selectedIndex: selectedIndex,
           indicatorColor: Colors.deepOrange,
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.grey.shade600,
+          elevation: 20,
           animationDuration: const Duration(milliseconds: 500),
           onDestinationSelected: (int index) {
             setState(() {
