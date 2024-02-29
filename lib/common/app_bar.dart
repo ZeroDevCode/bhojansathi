@@ -38,12 +38,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Handle bell icon tap
           },
         ),
-        // IconButton(
-        //   icon: const Icon(Icons.menu),
-        //   onPressed: () {
-        //     // Handle three-line icon tap
-        //   },
-        // ),
+        IconButton(onPressed: (){}, icon: Icon(Icons.person_outline_outlined)),
+        VerticalDivider(width: 20, color: Colors.transparent),
       ],
       titleSpacing: 0, // Set titleSpacing to reduce spacing
     );

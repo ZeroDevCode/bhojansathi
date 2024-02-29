@@ -10,6 +10,7 @@ import 'package:bhojansathi/features/splash/screens/on_boarding.dart';
 import 'package:bhojansathi/shell/base/screens/base_screen.dart';
 import 'package:bhojansathi/shell/chat/screens/chat_list_screen.dart';
 import 'package:bhojansathi/shell/chat/screens/open_chat_screen.dart';
+import 'package:bhojansathi/shell/donations/screens/donation_detials_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/donation_edit_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/new_donation_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/donation_history_screen.dart';
@@ -79,9 +80,14 @@ final router = GoRouter(
       builder: (context, state) => const HistoryScreen(),
     ),
     GoRoute(
+      path: RoutePaths.donationDetailScreen,
+      builder: (context, state) =>
+          DonationDetails(donationId: state.pathParameters['id']),
+    ),
+    GoRoute(
       path: RoutePaths.newDonationScreen,
       pageBuilder: (context, state) => CustomTransitionPage(
-        child: NewDonationScreen(),
+        child: const NewDonationScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             child,
       ),
@@ -101,6 +107,10 @@ final router = GoRouter(
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             child,
       ),
+    ),
+    GoRoute(
+      path: RoutePaths.base,
+      builder: (context, state) => const AuthScreen(),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,

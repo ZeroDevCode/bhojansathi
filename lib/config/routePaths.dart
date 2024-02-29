@@ -1,4 +1,5 @@
 class RoutePaths {
+  static const String base = '/';
   static const String splashScreen = '/splashScreen';
   static const String loginScreen = '/loginScreen';
   static const String otpScreen = '/otpScreen';
@@ -18,6 +19,8 @@ class RoutePaths {
   static const String volunteerProfileCreateScreen = '/volunteerProfileCreateScreen';
   static const String profileMyDonationScreen = '/profileMyDonationScreen';
   static const String editDonationScreen = '/editDonationScreen';
-  static const String donationDetailScreen = '/donationDetailScreen';
+  static const String donationDetailScreen = '/donationDetailScreen/:id';
   static const String chatDetailScreen = '/chatDetailScreen/:id';
+  static const String requestDonationScreen = "/requestDonationScreen";
+  static const String exploreScreen = "/exploreScreen";
 }

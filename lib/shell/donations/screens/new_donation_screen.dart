@@ -459,6 +459,7 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                         foodDonationTime: DateTime.now().toString(),
                         foodDonationID: DateTime.now().toString() +
                             FirebaseAuth.instance.currentUser!.uid,
+                        foodRecipientId: '',
                       );
                       BlocProvider.of<FoodDonationBloc>(context).add(
                         AddFoodDonationEvent(foodDonationModel: donation),

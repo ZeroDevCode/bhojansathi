@@ -1,3 +1,4 @@
+import 'package:bhojansathi/config/routePaths.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -61,7 +62,7 @@ class _ChatState extends State<Chat> {
             title: Text(users[index]),
             subtitle: Text(messages[index]),
             trailing: Text(times[index]),
-            onTap: () => context.push("/chatViewScreen"),
+            onTap: () => context.push(RoutePaths.chatDetailScreen.replaceFirst(':id', '1')),
           );
         },
       ),

@@ -1,9 +1,25 @@
+import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
 import 'package:bhojansathi/common/app_bar.dart';
+import 'package:bhojansathi/config/routePaths.dart';
+import 'package:bhojansathi/models/DonationModel.dart';
 import 'package:bhojansathi/utils/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    BlocProvider.of<FoodDonationBloc>(context).add(LoadFoodDonationEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +57,7 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 365,
+                height: 350,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -51,7 +67,9 @@ class HomePage extends StatelessWidget {
                     return Container(
                       width: 260,
                       margin: const EdgeInsets.symmetric(
-                          vertical: 0, horizontal: 5,),
+                        vertical: 0,
+                        horizontal: 5,
+                      ),
                       decoration: MyStyle.containerDecoration,
                       padding: const EdgeInsets.all(8),
                       child: Column(
@@ -62,7 +80,8 @@ class HomePage extends StatelessWidget {
                               const CircleAvatar(
                                 radius: 20.0,
                                 backgroundImage: AssetImage(
-                                    'assets/images/ngo.png'), // Replace with actual image path
+                                  'assets/images/ngo.png',
+                                ), // Replace with actual image path
                               ),
                               const SizedBox(width: 10),
                               Column(
@@ -105,8 +124,10 @@ class HomePage extends StatelessWidget {
                           const SizedBox(height: 10),
                           Text(
                             'The more contributions fundraisers bring in, the bigger the impact.'
-                                ' And today, it’s easier than ever to donate to a charity.',
+                            ' And today, it’s easier than ever to donate to a charity.',
                             textAlign: TextAlign.justify,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                             style: MyStyle.textSubHeadingStyle,
                           ),
                           Wrap(
@@ -197,95 +218,124 @@ class HomePage extends StatelessWidget {
 }
 
 Widget _buildDonationList(BuildContext context) {
-  return SizedBox(
-    height: 345,
-    child: ListView.builder(
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      itemCount: 5,
-      physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Container(
-          width: 260,
-          margin: const EdgeInsets.symmetric(
-              vertical: 0, horizontal: 5),
-          decoration: MyStyle.containerDecoration,
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage: AssetImage(
-                        'assets/images/ngo.png'), // Replace with actual image path
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Karan Chaudhary',
-                        style: MyStyle.textHeadingStyle,
-                      ),
-                      Text(
-                        'Rajkot, Gujarat',
-                        style: MyStyle.textSubHeadingStyle,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(height: 10),
-              Container(
-                height: 130,
+  return BlocBuilder<FoodDonationBloc, FoodDonationState>(
+    builder: (context, state) {
+      if (state is DonationLoadingState) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (state is DonationLoadedState) {
+        List<FoodDonationModel> donation = state.foodDonationList;
+        return SizedBox(
+          height: 310,
+          child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: donation.length,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return Container(
                 width: 260,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: Image.network(
-                        "https://via.placeholder.com/100")
-                        .image,
-                  ),
+                margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+                decoration: MyStyle.containerDecoration,
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage: AssetImage(
+                            'assets/images/ngo.png',
+                          ), // Replace with actual image path
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Karan Chaudhary',
+                              style: MyStyle.textHeadingStyle,
+                            ),
+                            Text(
+                              'Rajkot, Gujarat',
+                              style: MyStyle.textSubHeadingStyle,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 130,
+                      width: 260,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: Image.network(
+                                  (donation[index].foodImage.length > 0
+                                      ? "${donation[index].foodImage[0]}"
+                                      : "https://via.placeholder.com/150"))
+                              .image,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      donation[index].foodDescription,
+                      style: MyStyle.textSubHeadingStyle,
+                      textAlign: TextAlign.justify,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        context.push(RoutePaths.donationDetailScreen
+                            .replaceAll(':id', donation[index].foodDonationID));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 40),
+                        backgroundColor: Colors.deepOrange,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Accept Donation',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Image.network(
-                  'https://via.placeholder.com/100',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'The more contributions fundraisers bring in, the bigger the impact. And today, it’s easier than ever to donate to a charity.',
-                textAlign: TextAlign.justify,
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 40),
-                  backgroundColor: Colors.deepOrange,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  'Accept Donation',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
+              );
+            },
           ),
         );
-      },
-    ),
+      } else if (state is DonationOperationSucessState) {
+        context.read<FoodDonationBloc>().add(LoadFoodDonationEvent());
+        return const Center(
+          child: Text('Operation Success'),
+        );
+      } else if (state is DonationErrorState) {
+        return Center(
+          child: Text(state.message),
+        );
+      } else {
+        return const Center(
+          child: Text('No Donations'),
+        );
+      }
+    },
   );
 }
 

@@ -1,3 +1,4 @@
+import 'package:bhojansathi/utils/style.dart';
 import 'package:flutter/material.dart';
 
 class ChatViewScreen extends StatelessWidget {
@@ -75,74 +76,42 @@ class ChatViewScreen extends StatelessWidget {
               ),
             ),
             Container(
-              color: Colors.grey[300],
-              padding: const EdgeInsets.symmetric(vertical: 3.0),
-              child: Row(
-                children: [
-                  const SizedBox(width: 8.0),
-                  Container(
-                    height: 35.0,
-                    width: 35.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                          'https://images.unsplash.com/photo-1448932223592-d1fc686e76ea?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fG9ubGluZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60',
-                        ),
-                      ),
-                      border: Border.all(
-                        color: const Color(0xff025f7f),
-                        width: 2.0,
-                      ),
-                    ),
+              height: 60,
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 1),
                   ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: SizedBox(
-                      height: 35.0,
-                      child: TextField(
-                        style: const TextStyle(fontSize: 14.0),
-                        decoration: InputDecoration(
-                          hintText: 'Type a message...',
-                          hintStyle: const TextStyle(fontSize: 14.0),
-                          suffixIcon: IconButton(
-                            icon:
-                                const Icon(Icons.mic, color: Color(0xff025f7f)),
-                            onPressed: () => print('Mic Pressed'),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 12.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                            borderSide: const BorderSide(
-                              color: Color(0xff025f7f),
-                              width: 2.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 5.0),
-                  InkWell(
-                    child: const Icon(
-                      Icons.add,
-                      color: Color(0xff025f7f),
-                    ),
-                    onTap: () async => await showBottomSheetOptions(context),
-                  ),
-                  const SizedBox(width: 5.0),
-                  InkWell(
-                    child: const Icon(
-                      Icons.send,
-                      color: Color(0xff025f7f),
-                    ),
-                    onTap: () {},
-                  ),
-                  const SizedBox(width: 5.0),
                 ],
               ),
-            ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      textAlign: TextAlign.start,
+                      keyboardType: TextInputType.multiline,
+                      decoration: MyStyle.outlinedTextStyle.copyWith(
+                        hintText: "Type a message",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.send_outlined),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -31,9 +31,9 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
   }
 
   Future<void> _onRegisterUser(
-    RegisterUser event,
-    Emitter<UserRegisterState> emit,
-  ) async {
+      RegisterUser event,
+      Emitter<UserRegisterState> emit,
+      ) async {
     emit(UserRegistering());
     try {
       final user = await _userRepository.createUser(event.user);
@@ -59,14 +59,14 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
       _userSubscription?.cancel();
       _userSubscription =
           _userRepository.getUserStream(event.userId).listen((user) {
-        if (user == null) {
-          dev.log('User is null', name: 'User');
-          add(UnRegisterUser());
-        } else {
-          // Use data from the stream to update user
-          add(UpdateUser(user: user));
-        }
-      });
+            if (user == null) {
+              dev.log('User is null', name: 'User');
+              add(UnRegisterUser());
+            } else {
+              // Use data from the stream to update user
+              add(UpdateUser(user: user));
+            }
+          });
     } on FirebaseException catch (e) {
       dev.log('Error in getting user: ${e.code}', name: 'User');
       emit(UserError(e.toString()));

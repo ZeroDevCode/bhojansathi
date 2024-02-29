@@ -3,6 +3,15 @@ class Assets {
   Assets._();
 
   static const String assetsLogo = 'assets/logo.png';
+  static const String imagesDonar = 'assets/images/Donar.png';
+  static const String imagesDonate = 'assets/images/donate.jpg';
+  static const String imagesDonateFood = 'assets/images/donate_food.jpg';
+  static const String imagesLocation = 'assets/images/location.png';
+  static const String imagesNgo = 'assets/images/ngo.png';
+  static const String imagesNgo2 = 'assets/images/ngo2.jpg';
+  static const String imagesNgo3 = 'assets/images/ngo3.jpg';
+  static const String imagesNgo4 = 'assets/images/ngo4.jpg';
+  static const String imagesOnTheWay = 'assets/images/On_the_way.png';
   static const String imagesRegistration = 'assets/images/registration.png';
   static const String imagesVerification = 'assets/images/verification.png';
   static const String onboardingFour = 'assets/onboarding/four.jpg';
@@ -12,4 +21,5 @@ class Assets {
   static const String usertypeIndividual = 'assets/usertype/individual.jpg';
   static const String usertypeOrganization = 'assets/usertype/organization.jpg';
   static const String usertypeVolunter = 'assets/usertype/volunter.jpg';
+
 }

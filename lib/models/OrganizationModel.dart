@@ -43,6 +43,7 @@ class OrganizationModel {
     return data;
   }
 
+
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -54,5 +55,18 @@ class OrganizationModel {
       'description': description,
       'id': id,
     };
+  }
+
+  factory OrganizationModel.fromMap(Map<String, dynamic> map) {
+    return OrganizationModel(
+      name: map['name'],
+      address: map['address'],
+      phone: map['phone'],
+      email: map['email'],
+      website: map['website'],
+      logo: map['logo'],
+      description: map['description'],
+      id: map['id'],
+    );
   }
 }
