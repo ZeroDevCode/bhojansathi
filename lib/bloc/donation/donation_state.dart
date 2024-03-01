@@ -9,7 +9,6 @@ abstract class FoodDonationState extends Equatable {
 
 class DonationInitialState extends FoodDonationState {}
 
-
 class DonationLoadingState extends FoodDonationState {}
 
 class DonationLoadedState extends FoodDonationState {

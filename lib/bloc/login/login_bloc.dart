@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as dev;
 
-import 'package:bhojansathi/repositories/auth/auth_repository.dart';
+import 'package:bhojansathi/repositories/auth_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -1,47 +1,25 @@
+import 'package:bhojansathi/bloc/chat/chat_list/chat_list_bloc.dart';
 import 'package:bhojansathi/config/routePaths.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({Key? key}) : super(key: key);
+  const Chat({super.key});
 
   @override
   State<Chat> createState() => _ChatState();
 }
 
-List<String> imageUrls = [
-  'https://source.unsplash.com/random',
-  'https://source.unsplash.com/random'
-];
-
-List messages = [
-  'Hello',
-  'Order status?',
-  'Thank you',
-  'What is ETA?',
-  'Hello',
-  'We will deliver soon'
-];
-
-List times = [
-  '12:00 PM',
-  '12:01 PM',
-  '12:02 PM',
-  '12:03 PM',
-  '12:04 PM',
-  '12:05 PM',
-];
-
-List users = [
-  'Lakshya',
-  'Raj',
-  'Ram',
-  'Shyam',
-  'Gopal',
-  'Krishna',
-];
-
 class _ChatState extends State<Chat> {
+
+  @override
+  void initState() {
+    BlocProvider.of<ChatListBloc>(context).add(LoadChatListEvent(userId: FirebaseAuth.instance.currentUser!.uid));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,21 +29,7 @@ class _ChatState extends State<Chat> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: CircleAvatar(
-              radius: 25,
-              backgroundImage: NetworkImage(imageUrls[1]),
-            ),
-            title: Text(users[index]),
-            subtitle: Text(messages[index]),
-            trailing: Text(times[index]),
-            onTap: () => context.push(RoutePaths.chatDetailScreen.replaceFirst(':id', '1')),
-          );
-        },
-      ),
+      body: BlocB,
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bhojansathi/models/DonationModel.dart';
-import 'package:bhojansathi/repositories/dontation/donation_repository.dart';
+import 'package:bhojansathi/repositories/donation_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'dart:developer' as dev;
