@@ -12,8 +12,9 @@ import 'package:bhojansathi/shell/chat/screens/chat_list_screen.dart';
 import 'package:bhojansathi/shell/chat/screens/open_chat_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/donation_detials_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/donation_edit_screen.dart';
-import 'package:bhojansathi/shell/donations/screens/new_donation_screen.dart';
 import 'package:bhojansathi/shell/donations/screens/donation_history_screen.dart';
+import 'package:bhojansathi/shell/donations/screens/new_donation_screen.dart';
+import 'package:bhojansathi/shell/explore/screen/explore_screen.dart';
 import 'package:bhojansathi/shell/home/screens/home_screen.dart';
 import 'package:bhojansathi/shell/notification/screens/notification_screen.dart';
 import 'package:bhojansathi/shell/profile/screens/profile_screen.dart';
@@ -138,9 +139,18 @@ final router = GoRouter(
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
-          path: RoutePaths.notificationScreen,
+          path: RoutePaths.requestDonationScreen,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: const NotificationJ(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) => child,
+          ),
+        ),
+        GoRoute(
+          parentNavigatorKey: _shellNavigatorKey,
+          path: RoutePaths.exploreScreen,
+          pageBuilder: (context, state) => CustomTransitionPage(
+            child: const ExploreScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) => child,
           ),
