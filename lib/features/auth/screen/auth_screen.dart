@@ -15,9 +15,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
 
@@ -28,44 +27,16 @@ class _AuthScreenState extends State<AuthScreen> {
         BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is Uninitialized) {
+              dev.log("1", name:"AuthBloc");
             } else if (state is UnAuthenticated) {
-              dev.log('UnAuthenticated', name: 'Auth');
+              dev.log("2", name:"AuthBloc");
               context.go(RoutePaths.onBoardingScreen);
             } else if (state is Authenticated) {
-              dev.log('Authenticated', name: 'Auth');
-              context.read<UserRegisterBloc>().add(GetUser(state.phoneNo));
-            } else {
-              dev.log('Error', name: 'Auth');
-              context.go(RoutePaths.loginScreen);
-            }
-          },
-        ),
-        BlocListener<UserRegisterBloc, UserRegisterState>(
-          listener: (context, state) {
-            if (state is UserRegistered) {
-              context.go(RoutePaths.userTypeScreen);
-              dev.log("UserRegistered", name: "UserRegistered");
-            } else if (state is UserNotRegistered) {
-              dev.log("UserNotRegistered", name: "UserNotRegistered");
-              context.go(RoutePaths.userTypeScreen);
-            } else if (state is GettingUser) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return const AlertDialog(
-                    content: Row(
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text("Please wait"),
-                      ],
-                    ),
-                  );
-                },
-              );
+              dev.log("3", name:"AuthBloc");
               context.go(RoutePaths.baseScreen);
+            } else {
+              dev.log("4", name:"AuthBloc");
+              context.go(RoutePaths.loginScreen);
             }
           },
         ),

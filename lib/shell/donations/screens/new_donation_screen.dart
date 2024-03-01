@@ -51,6 +51,8 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
         if (state is DonationLoadingState) {
           showDialog(
             context: context,
+            barrierDismissible: false,
+            useSafeArea: true,
             builder: (context) {
               return AlertDialog(
                 shape: RoundedRectangleBorder(
@@ -429,7 +431,6 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                     minimumSize: const Size(double.infinity, 50),
                   ),
                   onPressed: () {
-                    dev.log(images.length.toString(), name: 'Donation');
                     if (images.length > 2 &&
                         _formKey.currentState!.validate() &&
                         _typeController.text != 'Select Category') {

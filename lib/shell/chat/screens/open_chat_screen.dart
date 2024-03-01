@@ -1,19 +1,63 @@
 import 'package:bhojansathi/utils/style.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class ChatViewScreen extends StatelessWidget {
+class ChatViewScreen extends StatefulWidget {
   final String chatId;
-  const ChatViewScreen({super.key, required this.chatId});
+  const ChatViewScreen({Key? key, required this.chatId}) : super(key: key);
+
+  @override
+  State<ChatViewScreen> createState() => _ChatViewScreenState();
+}
+
+class _ChatViewScreenState extends State<ChatViewScreen> {
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+  var chats;
+
+  late Stream<List<Message>> messagesStream;
+
+  @override
+  void initState() {
+    super.initState();
+    messagesStream = getMessages(userId, widget.chatId);
+  }
+
+  Future<void> sendMessage(String currentUserID, String otherUserID, String message) async {
+    await FirebaseFirestore.instance
+        .collection('chats')
+        .doc(currentUserID)
+        .collection('rooms')
+        .doc(otherUserID)
+        .collection('messages')
+        .add({
+      'text': message,
+      'senderId': currentUserID,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Stream<List<Message>> getMessages(String currentUserID, String otherUserID) {
+    return FirebaseFirestore.instance
+        .collection('chats')
+        .doc(currentUserID)
+        .collection('rooms')
+        .doc(otherUserID)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => Message.fromDocumentSnapshot(doc)).toList());
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jyoti Rand'),
+        title: const Text('User Chat Name'),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.phone_outlined)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.info_outline))
         ],
       ),
       body: SafeArea(
@@ -22,54 +66,22 @@ class ChatViewScreen extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: ListView.builder(
-                  reverse: true,
-                  itemCount: 20,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return UnconstrainedBox(
-                      alignment: index % 2 == 0
-                          ? Alignment.topLeft
-                          : Alignment.topRight,
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 250),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8),
-                          ),
-                          border: Border.all(
-                            color: Colors.grey.withOpacity(0.2),
-                          ),
-                        ),
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.all(8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Karan",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Divider(
-                              height: 5,
-                            ),
-                            Text(
-                              "This the message from karan lodu bhagat to make this bhojan sathi",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Container(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                "10:10 PM",
-                                style: TextStyle(fontSize: 10),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                child: StreamBuilder<List<Message>>(
+                  stream: messagesStream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      sendMessage(userId, widget.chatId, "Hello");
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    List<Message> messages = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        Message message = messages[index];
+                        return MessageBubble(message: message, isCurrentUser: message.senderId == userId);
+                      },
                     );
                   },
                 ),
@@ -77,7 +89,7 @@ class ChatViewScreen extends StatelessWidget {
             ),
             Container(
               height: 60,
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -103,10 +115,17 @@ class ChatViewScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
+                      onFieldSubmitted: (value) {
+                        if (value.trim().isNotEmpty) {
+                          sendMessage(userId, widget.chatId, value.trim());
+                        }
+                      },
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      sendMessage(userId, widget.chatId, "Hello");
+                    },
                     icon: const Icon(Icons.send_outlined),
                   ),
                 ],
@@ -119,96 +138,72 @@ class ChatViewScreen extends StatelessWidget {
   }
 }
 
-Future<void> showBottomSheetOptions(BuildContext context) {
-  return showModalBottomSheet(
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(16.0),
-        topRight: Radius.circular(16.0),
-      ),
-    ),
-    context: context,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                MaterialButton(
-                  onPressed: () => print("Will updated later."),
-                  color: const Color(0xff025f7f),
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.all(16),
-                  shape: const CircleBorder(),
-                  child: const Icon(
-                    Icons.camera_alt,
-                    size: 24,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                  child: Text(
-                    "Camera",
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                MaterialButton(
-                  onPressed: () => print("Will updated later."),
-                  color: const Color(0xff025f7f),
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.all(16),
-                  shape: const CircleBorder(),
-                  child: const Icon(
-                    Icons.photo,
-                    size: 24,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                  child: Text(
-                    "Gallery",
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                MaterialButton(
-                  onPressed: () => print("Will updated later."),
-                  color: const Color(0xff025f7f),
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.all(16),
-                  shape: const CircleBorder(),
-                  child: const Icon(
-                    Icons.assignment_rounded,
-                    size: 24,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                  child: Text(
-                    "Document",
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    },
-  );
+class Message {
+  final String text;
+  final String senderId;
+  final Timestamp timestamp;
+
+  Message({required this.text, required this.senderId, required this.timestamp});
+
+  factory Message.fromDocumentSnapshot(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return Message(
+      text: data['text'],
+      senderId: data['senderId'],
+      timestamp: data['timestamp'],
+    );
+  }
 }
+
+class MessageBubble extends StatelessWidget {
+  final Message message;
+  final bool isCurrentUser;
+
+  const MessageBubble({Key? key, required this.message, required this.isCurrentUser}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Container(
+          constraints: const BoxConstraints(maxWidth: 250),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            color: isCurrentUser ? Colors.blue : Colors.grey.withOpacity(0.2),
+          ),
+          margin: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!isCurrentUser)
+                const Text(
+                  "Other User",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              const Divider(
+                height: 5,
+              ),
+              Text(
+                message.text,
+                style: const TextStyle(fontSize: 12),
+              ),
+              Container(
+                alignment: Alignment.bottomRight,
+                child: Text(
+                  DateFormat('HH:mm').format(message.timestamp.toDate()),
+                  style: const TextStyle(fontSize: 10),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+

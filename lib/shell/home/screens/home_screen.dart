@@ -225,7 +225,7 @@ Widget _buildDonationList(BuildContext context) {
           child: CircularProgressIndicator(),
         );
       } else if (state is DonationLoadedState) {
-        List<FoodDonationModel> donation = state.foodDonationList;
+        List<FoodDonationModel> donation = state.foodDonationList.where((donationEvent) => donationEvent.foodDonationStatus == "Pending").toList();
         return SizedBox(
           height: 310,
           child: ListView.builder(
@@ -287,12 +287,14 @@ Widget _buildDonationList(BuildContext context) {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      donation[index].foodDescription,
-                      style: MyStyle.textSubHeadingStyle,
-                      textAlign: TextAlign.justify,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                    Expanded(
+                      child: Text(
+                        donation[index].foodDescription,
+                        style: MyStyle.textSubHeadingStyle,
+                        textAlign: TextAlign.justify,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () {

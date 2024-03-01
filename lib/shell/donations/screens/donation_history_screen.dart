@@ -2,6 +2,7 @@ import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/generated/assets.dart';
 import 'package:bhojansathi/models/DonationModel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +34,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 child: CircularProgressIndicator(),
               );
             } else if (state is DonationLoadedState) {
-              List<FoodDonationModel> donation = state.foodDonationList.reversed.toList();
+              List<FoodDonationModel> donation = state.foodDonationList.where((element) => element.foodDonorUID == FirebaseAuth.instance.currentUser!.uid).toList();
               return ListView.builder(
                 itemCount: donation.length,
                 itemBuilder: (context, index) {
@@ -62,8 +63,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         color: Colors.white,
                         surfaceTintColor: Colors.white,
                         itemBuilder: (context) => [
-                          const PopupMenuItem(
+                           PopupMenuItem(
                             child: SizedBox(width: 100,child: Text('View Details')),
+                            onTap: (){
+                              context.push(
+                                RoutePaths.donationDetailScreen.replaceAll(':id', donation[index].foodDonationID),
+                              );
+                            },
                           ),
                           PopupMenuItem(
                             child: Text('Edit'),

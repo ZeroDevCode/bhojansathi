@@ -17,7 +17,8 @@ class UserRepository {
 
   Future<UserModel?> getUser(String userId) async {
     try {
-      final user = await _firestore.collection('users').doc(userId).get();
+      final user = await _firestore.collection('users').doc(userId.replaceAll("+", "")).get();
+      print("$user======================");
       if (user.exists) {
         return UserModel.fromMap(user.data()!);
       }

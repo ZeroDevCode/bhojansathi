@@ -1,10 +1,9 @@
 import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
-import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
 import 'package:bhojansathi/config/routePaths.dart';
-import 'package:bhojansathi/generated/assets.dart';
 import 'package:bhojansathi/models/DonationModel.dart';
 import 'package:bhojansathi/utils/style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +18,18 @@ class DonationDetails extends StatefulWidget {
 }
 
 class _DonationDetailsState extends State<DonationDetails> {
+  late String userId;
+
+  void getUid() async {
+    userId = FirebaseAuth.instance.currentUser!.uid;
+  }
+
+  @override
+  void initState() {
+    getUid();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,10 +56,39 @@ class _DonationDetailsState extends State<DonationDetails> {
                 return _buildDonationDetails(foodDonationModel);
               } else {
                 return Scaffold(
-                  body: Text(widget.donationId! ?? "no id passed"),
+                  body: Text(widget.donationId!),
                 );
               }
             },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDonationPendingButton(FoodDonationModel foodDonationModel) {
+    return InkWell(
+      onTap: () async {
+        //cancel the donation
+        await FirebaseFirestore.instance
+            .collection("food_donation")
+            .doc(foodDonationModel.foodDonationID)
+            .update({
+          "foodDonationStatus": "OnTheWay",
+          "foodRecipientId": userId,
+        });
+      },
+      child: Container(
+        height: 50,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Text(
+          "Receive Donation",
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
       ),
@@ -59,27 +99,34 @@ class _DonationDetailsState extends State<DonationDetails> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),
+      controller: ScrollController()..addListener(() => setState(() {})),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: MyStyle.containerDecoration,
-            child: (foodDonationModel.foodImage.length < 0)
-                ? Image.network(
-                    foodDonationModel.foodImage[0]!,
-                    fit: BoxFit.cover,
-                    height: 200,
-                    width: double.infinity,
-                  )
-                : Image.asset(
-                    Assets.imagesDonateFood,
-                    fit: BoxFit.cover,
-                    height: 200,
-                    width: double.infinity,
+          if (foodDonationModel.foodImage.isNotEmpty)
+            Column(
+              children: [
+                SizedBox(
+                  height: 200,
+                  child: PageView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: foodDonationModel.foodImage.length,
+                    itemBuilder: (context, index) => Container(
+                      margin: const EdgeInsets.all(10),
+                      clipBehavior: Clip.antiAlias,
+                      decoration: MyStyle.containerDecoration,
+                      child: Image.network(
+                        foodDonationModel.foodImage[index],
+                        fit: BoxFit.cover,
+                        height: 200,
+                        width: double.infinity,
+                      ),
+                    ),
                   ),
-          ),
+                ),
+              ],
+            ),
           const SizedBox(height: 10),
           const Text(
             "Food Name",
@@ -197,19 +244,18 @@ class _DonationDetailsState extends State<DonationDetails> {
                 ),
               ),
               const Divider(),
-              //if status is onTheWay show cancel and chat button in row and below that show delivered button
-              if(foodDonationModel.foodDonationStatus == "Pending")
-                _buildDonationPendingButton(foodDonationModel),
-              if (foodDonationModel.foodDonationStatus == "OnTheWay")
-                _buildOnTheWayButton(foodDonationModel),
-              if (foodDonationModel.foodDonationStatus == "Delivered")
-                const Text(
-                  "Food Delivered",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              (foodDonationModel.foodDonationStatus == "Delivered")
+                  ? const Text("Donation is Already Done")
+                  : (foodDonationModel.foodDonorUID == userId)
+                      ? _completeDonationButton(foodDonationModel)
+                      : (foodDonationModel.foodDonationStatus == "Pending")
+                          ? _buildDonationPendingButton(foodDonationModel)
+                          : _buildOnTheWayButton(foodDonationModel),
+              const SizedBox(height: 10),
+              (foodDonationModel.foodDonationStatus == "OnTheWay" &&
+                      foodDonationModel.foodDonorUID == userId)
+                  ? _buildOnTheWayButton(foodDonationModel)
+                  : const SizedBox(),
             ],
           )
         ],
@@ -217,18 +263,13 @@ class _DonationDetailsState extends State<DonationDetails> {
     );
   }
 
-  Widget _buildDonationPendingButton(FoodDonationModel foodDonationModel) {
-    print("Pending Button");
+  Widget _buildChat(FoodDonationModel foodDonationModel) {
     return InkWell(
-      onTap: () async {
-        //cancel the donation
-        await FirebaseFirestore.instance
-            .collection("food_donation")
-            .doc(foodDonationModel.foodDonationID)
-            .update({
-          "foodDonationStatus": "OnTheWay",
-          "foodRecipientId": "123",
-        });
+      onTap: () {
+        context.push(
+          RoutePaths.chatDetailScreen
+              .replaceAll(":id", foodDonationModel.foodDonorUID),
+        );
       },
       child: Container(
         height: 50,
@@ -238,7 +279,7 @@ class _DonationDetailsState extends State<DonationDetails> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: const Text(
-          "Accept Donation",
+          "Say Hi 👋 to Donor",
           style: TextStyle(
             color: Colors.white,
           ),
@@ -281,22 +322,58 @@ class _DonationDetailsState extends State<DonationDetails> {
         const VerticalDivider(),
         //chat button
         Expanded(
-          child: Container(
-            height: 50,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Text(
-              "Chat",
-              style: TextStyle(
-                color: Colors.white,
+          child: InkWell(
+            onTap: (){
+              context.push(
+                RoutePaths.chatDetailScreen
+                    .replaceAll(":id", foodDonationModel.foodDonorUID),
+              );
+            },
+            child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                "Chat",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _completeDonationButton(FoodDonationModel foodDonationModel) {
+    return InkWell(
+      onTap: () async {
+        //cancel the donation
+        await FirebaseFirestore.instance
+            .collection("food_donation")
+            .doc(foodDonationModel.foodDonationID)
+            .update({
+          "foodDonationStatus": "Delivered",
+        });
+      },
+      child: Container(
+        height: 50,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.deepOrange,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Text(
+          "Mark as Complete Donation",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 }

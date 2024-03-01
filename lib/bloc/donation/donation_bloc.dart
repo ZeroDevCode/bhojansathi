@@ -40,6 +40,7 @@ class FoodDonationBloc extends Bloc<FoodDonationEvent, FoodDonationState> {
       AddFoodDonationEvent event, Emitter<FoodDonationState> emit) async {
     try {
       emit(DonationLoadingState());
+      await _dontationRepository.addFoodDonation(event.foodDonationModel);
       emit(DonationOperationSucessState());
     } catch (e) {
       emit(DonationErrorState(message: e.toString()));
@@ -61,12 +62,5 @@ class FoodDonationBloc extends Bloc<FoodDonationEvent, FoodDonationState> {
     } catch (e) {
       emit(DonationErrorState(message: e.toString()));
     }
-  }
-
-  @override
-  void onTransition(
-      Transition<FoodDonationEvent, FoodDonationState> transition) {
-    dev.log(transition.toString(), name: 'FoodDonationBloc`');
-    super.onTransition(transition);
   }
 }
