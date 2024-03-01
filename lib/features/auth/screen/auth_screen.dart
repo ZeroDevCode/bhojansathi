@@ -1,7 +1,6 @@
 import 'dart:developer' as dev;
 
 import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
-import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,29 +26,27 @@ class _AuthScreenState extends State<AuthScreen> {
         BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is Uninitialized) {
-              dev.log("1", name:"AuthBloc");
+              dev.log("1", name: "AuthBloc");
             } else if (state is UnAuthenticated) {
-              dev.log("2", name:"AuthBloc");
+              dev.log("2", name: "AuthBloc");
               context.go(RoutePaths.onBoardingScreen);
             } else if (state is Authenticated) {
-              dev.log("3", name:"AuthBloc");
+              dev.log("3", name: "AuthBloc");
               context.go(RoutePaths.baseScreen);
             } else {
-              dev.log("4", name:"AuthBloc");
+              dev.log("4", name: "AuthBloc");
               context.go(RoutePaths.loginScreen);
             }
           },
         ),
       ],
-      child: Scaffold(
+      child: const Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/verification.png'),
-              const SizedBox(height: 5),
-              const CircularProgressIndicator(),
-              const Text('Please wait'),
+              CircularProgressIndicator(),
+              Text('Please wait'),
             ],
           ),
         ),
