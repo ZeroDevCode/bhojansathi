@@ -10,7 +10,7 @@ class ChatViewScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jyoti Rand'),
+        title: const Text('Chats'),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.phone_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.info_outline))

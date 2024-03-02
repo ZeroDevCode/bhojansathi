@@ -32,13 +32,13 @@ class _BaseScreenState extends State<BaseScreen> {
           });
           if (index == 0) {
             context.go(RoutePaths.baseScreen);
-          } else if (index == 1) {
+          } else if (index == 00) {
             context.go(RoutePaths.requestDonationScreen);
-          } else if (index == 2) {
+          } else if (index == 1) {
             context.go(RoutePaths.exploreScreen);
-          } else if (index == 3) {
+          } else if (index == 2) {
             context.go(RoutePaths.chatScreen);
-          } else if (index == 4) {
+          } else if (index == 3) {
             context.go(RoutePaths.historyScreen);
           }
         },
@@ -48,11 +48,11 @@ class _BaseScreenState extends State<BaseScreen> {
             icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.edit_outlined, color: Colors.white),
-            icon: Icon(Icons.edit_outlined),
-            label: 'Request',
-          ),
+          // NavigationDestination(
+          //   selectedIcon: Icon(Icons.edit_outlined, color: Colors.white),
+          //   icon: Icon(Icons.edit_outlined),
+          //   label: 'Request',
+          // ),
           NavigationDestination(
             selectedIcon: Icon(Icons.explore_outlined, color: Colors.white),
             icon: Icon(Icons.explore_outlined),

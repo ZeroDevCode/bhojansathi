@@ -15,6 +15,59 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<DonationItemData> donationItems = [
+    DonationItemData(
+      imagePath: 'assets/images/donate_food.jpg',
+      name: 'Krish Trust',
+      location: 'Rajkot',
+      description:
+          "The more contributions fundraisers bring in, the bigger the impact."
+          "And today, it’s easier than ever to donate to a charity.",
+      time: 'Exp - 1 Hour',
+      distance: '2Kms',
+    ),
+    DonationItemData(
+      imagePath: 'assets/images/donate.jpg',
+      name: 'Yesha Charity',
+      location: 'Rajkot',
+      description:
+          "The more contributions fundraisers bring in, the bigger the impact."
+          "And today, it’s easier than ever to donate to a charity.",
+      time: 'Exp - 2 Hours',
+      distance: '3Kms',
+    ),
+    DonationItemData(
+      imagePath: 'assets/images/b3.jpg',
+      name: 'Bhavya Trust',
+      location: 'Rajkot',
+      description:
+          "The more contributions fundraisers bring in, the bigger the impact."
+          "And today, it’s easier than ever to donate to a charity.",
+      time: 'Exp - 2 Hours',
+      distance: '3Kms',
+    ),
+    DonationItemData(
+      imagePath: 'assets/images/b4.jpg',
+      name: 'Karan Charity',
+      location: 'Rajkot',
+      description:
+          "The more contributions fundraisers bring in, the bigger the impact."
+          "And today, it’s easier than ever to donate to a charity.",
+      time: 'Exp - 2 Hours',
+      distance: '3Kms',
+    ),
+    DonationItemData(
+      imagePath: 'assets/images/b5.jpg',
+      name: 'Vivek Trust',
+      location: 'Rajkot',
+      description:
+          "The more contributions fundraisers bring in, the bigger the impact."
+          "And today, it’s easier than ever to donate to a charity.",
+      time: 'Exp - 2 Hours',
+      distance: '3Kms',
+    ),
+  ];
+
   @override
   void initState() {
     BlocProvider.of<FoodDonationBloc>(context).add(LoadFoodDonationEvent());
@@ -60,7 +113,7 @@ class _HomePageState extends State<HomePage> {
               Row(
                 children: [
                   const Text(
-                    "   Hunger spots near you",
+                    "   Request by NGO's",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -80,13 +133,14 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SizedBox(
-                height: 350,
+                height: 360,
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: 5,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
+                    var currentItem = donationItems[index];
                     return Container(
                       width: 260,
                       margin: const EdgeInsets.symmetric(
@@ -102,20 +156,19 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               const CircleAvatar(
                                 radius: 20.0,
-                                backgroundImage: AssetImage(
-                                  'assets/images/ngo.png',
-                                ), // Replace with actual image path
+                                backgroundImage:
+                                    AssetImage('assets/images/ngo2.jpg'),
                               ),
                               const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Karan Chaudhuri',
+                                    currentItem.name,
                                     style: MyStyle.textHeadingStyle,
                                   ),
                                   Text(
-                                    'Rajkot, Gujarat',
+                                    currentItem.location,
                                     style: MyStyle.textSubHeadingStyle,
                                   ),
                                 ],
@@ -134,20 +187,17 @@ class _HomePageState extends State<HomePage> {
                               ),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: Image.network(
-                                        "https://via.placeholder.com/100")
-                                    .image,
+                                image: AssetImage(currentItem.imagePath),
                               ),
                             ),
-                            child: Image.network(
-                              'https://via.placeholder.com/100',
-                              fit: BoxFit.cover,
-                            ),
+                            // child: Image.network(
+                            //   'assets/images/donate.jpg',
+                            //   fit: BoxFit.cover,
+                            // ),
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'The more contributions fundraisers bring in, the bigger the impact.'
-                            ' And today, it’s easier than ever to donate to a charity.',
+                            currentItem.description,
                             textAlign: TextAlign.justify,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
@@ -160,8 +210,9 @@ class _HomePageState extends State<HomePage> {
                             alignment: WrapAlignment.start,
                             children: [
                               _buildChip(
-                                  'Exp - 1 Hour', Icons.access_time_outlined),
-                              _buildChip('2Kms', Icons.location_on_outlined),
+                                  currentItem.time, Icons.access_time_outlined),
+                              _buildChip(currentItem.distance,
+                                  Icons.location_on_outlined),
                             ],
                           ),
                           ElevatedButton(
@@ -188,28 +239,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 5),
-              Row(
-                children: [
-                  Text(
-                    "  Donations",
-                    style: MyStyle.textHeadingStyle.copyWith(
-                      fontSize: 16,
-                    ),
-                  ),
-                  const Expanded(child: SizedBox()),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'See All',
-                      style: TextStyle(
-                        color: Colors.deepOrange,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
               Text(
                 '  Top NGO\'s',
                 style: MyStyle.textHeadingStyle.copyWith(fontSize: 16),
@@ -247,7 +276,10 @@ Widget _buildDonationList(BuildContext context) {
           child: CircularProgressIndicator(),
         );
       } else if (state is DonationLoadedState) {
-        List<FoodDonationModel> donation = state.foodDonationList.where((donationEvent) => donationEvent.foodDonationStatus == "Pending").toList();
+        List<FoodDonationModel> donation = state.foodDonationList
+            .where((donationEvent) =>
+                donationEvent.foodDonationStatus == "Pending")
+            .toList();
         return SizedBox(
           height: 310,
           child: ListView.builder(
@@ -427,4 +459,22 @@ class NGOCircle extends StatelessWidget {
       ),
     );
   }
+}
+
+class DonationItemData {
+  final String imagePath;
+  final String name;
+  final String location;
+  final String description;
+  final String time;
+  final String distance;
+
+  DonationItemData({
+    required this.imagePath,
+    required this.name,
+    required this.location,
+    required this.description,
+    required this.time,
+    required this.distance,
+  });
 }
