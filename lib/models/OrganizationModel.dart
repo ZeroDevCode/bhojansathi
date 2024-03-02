@@ -1,72 +1,82 @@
-class OrganizationModel {
-  String name;
-  String address;
-  String phone;
-  String email;
-  String website;
-  String logo;
-  String description;
-  String id;
+import 'package:equatable/equatable.dart';
 
-  OrganizationModel({
-    required this.name,
-    required this.address,
-    required this.phone,
-    required this.email,
-    required this.website,
-    required this.logo,
-    required this.description,
-    required this.id,
+class OrganizationModel extends Equatable{
+  final String organizationId;
+  final String organizationName;
+  final String organizationAddress;
+  final String organizationContact;
+  final String organizationEmail;
+  final String organizationDescription;
+  final String organizationType;
+  final String organizationCity;
+  final String organizationState;
+  final String organizationPaymentMethod;
+  final String organizationImage;
+  final String organizationOwner;
+
+  const OrganizationModel({
+    required this.organizationId,
+    required this.organizationName,
+    required this.organizationAddress,
+    required this.organizationContact,
+    required this.organizationEmail,
+    required this.organizationDescription,
+    required this.organizationType,
+    required this.organizationCity,
+    required this.organizationState,
+    required this.organizationPaymentMethod,
+    required this.organizationImage,
+    required this.organizationOwner,
   });
-
-  fromJson(Map<String, dynamic> json) {
-    name = json['name'] ?? "No Name";
-    address = json['address'] ?? "No Address";
-    phone = json['phone'] ?? "No Phone";
-    email = json['email'] ?? "No Email";
-    website = json['website'] ?? "No Website";
-    logo = json['logo'] ?? "No Logo";
-    description = json['description'] ?? "No Description";
-    id = json['id'] ?? "No ID";
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['address'] = address;
-    data['phone'] = phone;
-    data['email'] = email;
-    data['website'] = website;
-    data['logo'] = logo;
-    data['description'] = description;
-    data['id'] = id;
-    return data;
-  }
 
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'address': address,
-      'phone': phone,
-      'email': email,
-      'website': website,
-      'logo': logo,
-      'description': description,
-      'id': id,
+      'organizationId': organizationId,
+      'organizationName': organizationName,
+      'organizationAddress': organizationAddress,
+      'organizationContact': organizationContact,
+      'organizationEmail': organizationEmail,
+      'organizationDescription': organizationDescription,
+      'organizationType': organizationType,
+      'organizationCity': organizationCity,
+      'organizationState': organizationState,
+      'organizationPaymentMethod': organizationPaymentMethod,
+      'organizationImage': organizationImage,
+      'organizationOwner': organizationOwner,
     };
   }
 
   factory OrganizationModel.fromMap(Map<String, dynamic> map) {
     return OrganizationModel(
-      name: map['name'],
-      address: map['address'],
-      phone: map['phone'],
-      email: map['email'],
-      website: map['website'],
-      logo: map['logo'],
-      description: map['description'],
-      id: map['id'],
+      organizationId: map['organizationId'] as String,
+      organizationName: map['organizationName'] as String,
+      organizationAddress: map['organizationAddress'] as String,
+      organizationContact: map['organizationContact'] as String,
+      organizationEmail: map['organizationEmail'] as String,
+      organizationDescription: map['organizationDescription'] as String,
+      organizationType: map['organizationType'] as String,
+      organizationCity: map['organizationCity'] as String,
+      organizationState: map['organizationState'] as String,
+      organizationPaymentMethod: map['organizationPaymentMethod'] as String,
+      organizationImage: map['organizationImage'] as String,
+      organizationOwner: map['organizationOwner'] as String,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    organizationId,
+    organizationName,
+    organizationAddress,
+    organizationContact,
+    organizationEmail,
+    organizationDescription,
+    organizationType,
+    organizationCity,
+    organizationState,
+    organizationPaymentMethod,
+    organizationImage,
+    organizationOwner,
+  ];
 }

@@ -1,4 +1,6 @@
+import 'package:bhojansathi/config/routePaths.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -38,8 +40,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Handle bell icon tap
           },
         ),
-        IconButton(onPressed: (){}, icon: Icon(Icons.person_outline_outlined)),
-        VerticalDivider(width: 20, color: Colors.transparent),
+        IconButton(
+          onPressed: () {
+            context.push(RoutePaths.profileScreen);
+          },
+          icon: const Icon(Icons.person_outline_outlined),
+        ),
+        const VerticalDivider(width: 20, color: Colors.transparent),
       ],
       titleSpacing: 0, // Set titleSpacing to reduce spacing
     );

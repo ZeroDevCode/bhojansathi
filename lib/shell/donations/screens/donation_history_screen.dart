@@ -77,7 +77,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           margin: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 10),
                           decoration: BoxDecoration(
-                            //show shadoewd container
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [

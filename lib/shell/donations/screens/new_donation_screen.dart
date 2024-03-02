@@ -123,9 +123,62 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () async {
-                          await getImageFromSource(
-                            source: ImageSource.gallery,
-                            index: index,
+                          showBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return SizedBox(
+                                height: 200,
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        const Spacer(),
+                                        const Text(
+                                          'Select Image',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        IconButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          icon: const Icon(Icons.close),
+                                        ),
+                                      ],
+
+                                    ),
+                                    const Divider(color: Colors.black,height: 2,),
+                                    const SizedBox(height: 10),
+                                    ListTile(
+                                      leading: const Icon(Icons.camera_alt),
+                                      title: const Text('Camera'),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await getImageFromSource(
+                                          source: ImageSource.camera,
+                                          index: index,
+                                        );
+                                      },
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(Icons.image),
+                                      title: const Text('Gallery'),
+                                      onTap: () async {
+                                        Navigator.pop(context);
+                                        await getImageFromSource(
+                                          source: ImageSource.gallery,
+                                          index: index,
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           );
                         },
                         child: Container(
@@ -472,7 +525,6 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
     } else {}
   }
 }
-
 
 // Row(
 // children: [

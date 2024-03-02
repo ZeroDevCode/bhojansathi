@@ -81,6 +81,14 @@ final router = GoRouter(
       builder: (context, state) => const HistoryScreen(),
     ),
     GoRoute(
+      path: RoutePaths.profileScreen,
+      pageBuilder: (context, state) => CustomTransitionPage(
+        child: const ProfileScreen(),
+        transitionsBuilder:
+            (context, animation, secondaryAnimation, child) => child,
+      ),
+    ),
+    GoRoute(
       path: RoutePaths.donationDetailScreen,
       builder: (context, state) =>
           DonationDetails(donationId: state.pathParameters['id']),
@@ -151,15 +159,6 @@ final router = GoRouter(
           path: RoutePaths.exploreScreen,
           pageBuilder: (context, state) => CustomTransitionPage(
             child: const ExploreScreen(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) => child,
-          ),
-        ),
-        GoRoute(
-          parentNavigatorKey: _shellNavigatorKey,
-          path: RoutePaths.profileScreen,
-          pageBuilder: (context, state) => CustomTransitionPage(
-            child: const ProfileScreen(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) => child,
           ),
