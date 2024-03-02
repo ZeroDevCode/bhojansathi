@@ -1,121 +1,51 @@
 part of 'login_bloc.dart';
 
-class LogInState {
-  final bool isPhoneValid;
-  final bool isSubmitting;
+abstract class LogInState extends Equatable {
+  const LogInState();
 
-  final bool isOtpSent;
-  final bool isOtpVerified;
-  final bool isOtpError;
+  @override
+  List<Object?> get props => [];
+}
 
-  final String? verificationId;
+class LogInStateInitial extends LogInState {
+}
+
+class LogInStateLoading extends LogInState {
+  const LogInStateLoading();
+}
+
+class LogInStateOtpSent extends LogInState {
+  final String verificationId;
   final int? forceResendingToken;
-  final String? error;
 
-  const LogInState({
-    required this.isPhoneValid,
-    required this.isSubmitting,
-    required this.isOtpSent,
-    required this.isOtpVerified,
-    required this.isOtpError,
+  const LogInStateOtpSent({
     required this.verificationId,
     required this.forceResendingToken,
-    required this.error,
   });
 
-  factory LogInState.empty() {
-    return const LogInState(
-      isPhoneValid: false,
-      isSubmitting: false,
-      isOtpSent: false,
-      isOtpVerified: false,
-      isOtpError: false,
-      verificationId: null,
-      forceResendingToken: null,
-      error: null,
-    );
-  }
+  @override
+  List<Object?> get props => [verificationId, forceResendingToken];
+}
 
-  factory LogInState.loading() {
-    return const LogInState(
-      isPhoneValid: true,
-      isSubmitting: true,
-      isOtpSent: false,
-      isOtpVerified: false,
-      isOtpError: false,
-      verificationId: null,
-      forceResendingToken: null,
-      error: null,
-    );
-  }
+class LogInStateFailure extends LogInState {
+  final String error;
 
-  factory LogInState.failure(String error) {
-    return LogInState(
-      isPhoneValid: true,
-      isSubmitting: false,
-      isOtpSent: false,
-      isOtpVerified: false,
-      isOtpError: true,
-      verificationId: null,
-      forceResendingToken: null,
-      error: error,
-    );
-  }
+  const LogInStateFailure({required this.error});
 
-  factory LogInState.success() {
-    return const LogInState(
-      isPhoneValid: true,
-      isSubmitting: false,
-      isOtpSent: false,
-      isOtpVerified: true,
-      isOtpError: false,
-      verificationId: null,
-      forceResendingToken: null,
-      error: null,
-    );
-  }
+  @override
+  List<Object?> get props => [error];
+}
 
-  LogInState update({
-    bool? isPhoneValid,
-    bool? isSubmitting,
-    bool? isOtpSent,
-    bool? isOtpVerified,
-    bool? isOtpError,
-    String? verificationId,
-    int? forceResendingToken,
-    String? error,
-  }) {
-    return copyWith(
-      isPhoneValid: isPhoneValid,
-      isSubmitting: isSubmitting,
-      isOtpSent: isOtpSent,
-      isOtpVerified: isOtpVerified,
-      isOtpError: isOtpError,
-      verificationId: verificationId,
-      forceResendingToken: forceResendingToken,
-      error: error,
-    );
-  }
+class LogInStateSuccess extends LogInState {
+  final String phoneNumber;
+  final String userId;
 
-  LogInState copyWith({
-    bool? isPhoneValid,
-    bool? isSubmitting,
-    bool? isOtpSent,
-    bool? isOtpVerified,
-    bool? isOtpError,
-    String? verificationId,
-    int? forceResendingToken,
-    String? error,
-  }) {
-    return LogInState(
-      isPhoneValid: isPhoneValid ?? this.isPhoneValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isOtpSent: isOtpSent ?? this.isOtpSent,
-      isOtpVerified: isOtpVerified ?? this.isOtpVerified,
-      isOtpError: isOtpError ?? this.isOtpError,
-      verificationId: verificationId ?? this.verificationId,
-      forceResendingToken: forceResendingToken ?? this.forceResendingToken,
-      error: error ?? this.error,
-    );
-  }
+  const LogInStateSuccess(this.phoneNumber, this.userId);
+
+  @override
+  List<Object?> get props => [phoneNumber, userId];
+}
+
+class LogInStateEmpty extends LogInState {
+  const LogInStateEmpty();
 }

@@ -42,7 +42,7 @@ final router = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: RoutePaths.otpScreen,
-      builder: (context, state) => const OTPScreen(),
+      builder: (context, state) => OTPScreen(verificationId: state.pathParameters['verificationId']!),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,

@@ -1,9 +1,11 @@
 import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
+import 'package:bhojansathi/bloc/chat/chat_list/chat_list_bloc.dart';
 import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
 import 'package:bhojansathi/bloc/login/login_bloc.dart';
 import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
 import 'package:bhojansathi/config/router.dart';
 import 'package:bhojansathi/repositories/auth_repository.dart';
+import 'package:bhojansathi/repositories/chat_repository.dart';
 import 'package:bhojansathi/repositories/donation_repository.dart';
 import 'package:bhojansathi/repositories/user_repository.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -20,8 +22,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
-    webProvider:
-        ReCaptchaV3Provider('AIzaSyCsNPOr42NMDcc4eBwVtXyGJkrTAMcyZKw'),
+    webProvider: ReCaptchaV3Provider('AIzaSyCsNPOr42NMDcc4eBwVtXyGJkrTAMcyZKw'),
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.debug,
   );
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               FoodDonationBloc(donationRepository: DonationRepository()),
         ),
+        BlocProvider(
+          create: (context) => ChatListBloc(chatRepository: ChatRepository()),
+        )
       ],
       child: MaterialApp.router(
         theme: ThemeData(

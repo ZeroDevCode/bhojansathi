@@ -21,9 +21,16 @@ class MyStyle {
   static var containerDecoration = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(10),
-    border: Border.all(
-      color: Colors.grey.withOpacity(0.2),
-    ),
+    // border: Border.all(
+    //   color: Colors.grey.withOpacity(0.2),
+    // ),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.shade200.withOpacity(1),
+        spreadRadius: 1,
+        blurRadius: 7,
+      ),
+    ],
   );
 
   static var textHeadingStyle =  const TextStyle(

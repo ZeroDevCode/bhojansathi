@@ -37,6 +37,29 @@ class _HomePageState extends State<HomePage> {
               Row(
                 children: [
                   const Text(
+                    "   Donations",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Expanded(child: SizedBox()),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'See All',
+                      style: TextStyle(
+                        color: Colors.deepOrange,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              _buildDonationList(context),
+              Row(
+                children: [
+                  const Text(
                     "   Hunger spots near you",
                     style: TextStyle(
                       fontSize: 16,
@@ -186,13 +209,12 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              _buildDonationList(context),
               const SizedBox(height: 10),
               Text(
                 '  Top NGO\'s',
                 style: MyStyle.textHeadingStyle.copyWith(fontSize: 16),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               const SingleChildScrollView(

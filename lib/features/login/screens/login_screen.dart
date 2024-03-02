@@ -2,7 +2,9 @@ import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
 import 'package:bhojansathi/bloc/login/login_bloc.dart';
 import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
 import 'package:bhojansathi/config/routePaths.dart';
+import 'package:bhojansathi/generated/assets.dart';
 import 'package:bhojansathi/utils/helper.dart';
+import 'package:bhojansathi/utils/style.dart';
 import 'package:bhojansathi/utils/validators.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,175 +31,124 @@ class _RegistrationScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.only(left: 25, right: 25),
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/registration.png',
-                width: 150,
-                height: 150,
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              const Text(
-                "Phone Verification",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "We need to register your phone without getting started!",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                height: 55,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      width: 10,
+      body: BlocListener<LogInBloc, LogInState>(
+        bloc: _loginBloc,
+        listener: (context, state) {
+          if (state is LogInStateOtpSent) {
+            Helper.scaffoldMessenger("Opt Send", context);
+            Navigator.pop(context);
+            context.go(RoutePaths.otpScreen
+                .replaceAll(":verificationId", state.verificationId));
+          }
+          if (state is LogInStateFailure) {
+            Helper.scaffoldMessenger(state.error, context);
+          }
+          if (state is LogInStateLoading) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              useSafeArea: false,
+              builder: (context) {
+                return const AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
                     ),
-                    const SizedBox(
-                      width: 40,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "+91",
-                        ),
+                  ),
+                  content: Row(
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(width: 20),
+                      Text('Sending OTP...'),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        },
+        child: BlocBuilder<LogInBloc, LogInState>(
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(
+                    Assets.imagesRegistration,
+                    height: 200,
+                  ),
+                  Text(
+                    'Phone Verification',
+                    style: MyStyle.textHeadingStyle.copyWith(
+                      fontSize: 24,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    'We will send you an OTP to verify your phone number',
+                    style: MyStyle.textSubHeadingStyle,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _mobileNoController,
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(15),
+                      labelStyle: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                      labelText: 'Mobile Number',
+                      hintText: 'Enter your mobile number',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      prefixText: '+91 ',
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your mobile number';
+                      } else if (!Validators.isValidMobileNo(value)) {
+                        return 'Please enter a valid mobile number';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    style: MyStyle.buttonStyle.copyWith(
+                      fixedSize: MaterialStateProperty.all(
+                        const Size(150, 50),
                       ),
                     ),
-                    const Text(
-                      "|",
-                      style: TextStyle(fontSize: 33, color: Colors.grey),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _mobileNoController,
-                        maxLength: 10,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Phone Number",
-                          counterText: "",
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              BlocListener<LogInBloc, LogInState>(
-                listener: (context, state) {
-                  if (state.isOtpSent) {
-                    context.go(RoutePaths.otpScreen);
-                  } else if (state.isOtpError) {
-                    Navigator.of(context).pop();
-                    Helper.scaffoldMessenger('', context);
-                  } else if (state.isSubmitting) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          content: Row(
-                            children: [
-                              CircularProgressIndicator(
-                                color: Colors.deepOrange,
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text("Sending OTP"),
-                            ],
-                          ),
+                    onPressed: () {
+                      if (Validators.isValidMobileNo(
+                          _mobileNoController.text)) {
+                        _loginBloc.add(
+                          SendOtpPressed(phoneNumber: _mobileNoController.text),
                         );
-                      },
-                    );
-                  } else if (state.isOtpVerified) {
-                    context.read<AuthBloc>().add(LoggedIn());
-                    Future.delayed(
-                      const Duration(seconds: 0),
-                      () {
-                        final phoneNo =
-                            (context.read<AuthBloc>().state as Authenticated)
-                                .phoneNo;
-                        context.read<UserRegisterBloc>().add(GetUser(phoneNo));
-                      },
-                    );
-                  }
-                },
-                child: BlocBuilder<LogInBloc, LogInState>(
-                  bloc: _loginBloc,
-                  builder: (context, state) {
-                    return SizedBox(
-                      width: double.infinity,
-                      height: 45,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepOrange,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {
-                          _onLoginPressed();
-                        },
-                        child: const Text(
-                          "Verify",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      } else {
+                        Helper.scaffoldMessenger(
+                            'Please enter valid mobile number', context);
+                      }
+                    },
+                    child: Text(
+                      'Send OTP',
+                      style: MyStyle.primaryButtonTextStyle.copyWith(
+                        fontSize: 14,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
-  }
-
-  void _onLoginPressed() {
-    if (Validators.isValidMobileNo(_mobileNoController.text)) {
-      _loginBloc.add(SendOtpPressed(phoneNumber: _mobileNoController.text));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Please enter a valid mobile number",
-          ),
-        ),
-      );
-    }
   }
 }

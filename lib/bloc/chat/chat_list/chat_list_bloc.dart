@@ -51,5 +51,4 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
     emit(ChatListLoadedState(chatList: event.chatListModel));
   }
 
-
 }

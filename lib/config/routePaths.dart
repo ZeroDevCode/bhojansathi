@@ -2,7 +2,7 @@ class RoutePaths {
   static const String base = '/';
   static const String splashScreen = '/splashScreen';
   static const String loginScreen = '/loginScreen';
-  static const String otpScreen = '/otpScreen';
+  static const String otpScreen = '/otpScreen/:verificationId';
   static const String userRegisterScreen = '/userRegisterScreen';
   static const String homeScreen = '/homeScreen';
   static const String onBoardingScreen = '/onBoardingScreen';

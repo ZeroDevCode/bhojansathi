@@ -9,11 +9,9 @@ import 'package:bhojansathi/utils/style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer' as dev;
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class NewDonationScreen extends StatefulWidget {
   const NewDonationScreen({super.key});
@@ -360,63 +358,21 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  children: [
-                    const Text(
-                      'Donation location is your location current?',
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                    const Spacer(),
-                    Switch(
-                      value: isCurrentLocation,
-                      onChanged: (bool value) async {
-                        if (value) {
-                          final status = await Permission.location.request();
-                          if (status.isGranted) {
-                            final position =
-                                await Geolocator.getCurrentPosition(
-                              desiredAccuracy: LocationAccuracy.high,
-                            );
-                            print(position.latitude);
-                            latitude = position.latitude.toInt();
-                            longitude = position.longitude.toInt();
-                            setState(() {
-                              isCurrentLocation = value;
-                              _locationController.text =
-                                  'Latitude: $latitude, Longitude: $longitude';
-                            });
-                          } else {
-                            Helper.scaffoldMessenger(
-                              'Location permission is required to get current location',
-                              context,
-                            );
-                          }
-                        } else {
-                          setState(
-                            () {
-                              isCurrentLocation = value;
-                              _locationController.clear();
-                            },
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  controller: _contactNumberController,
-                  decoration: MyStyle.outlinedTextStyle.copyWith(
-                    labelText: 'Contact Number',
-                    hintText: 'Enter the contact number',
-                  ),
-                  style: const TextStyle(
-                    height: 1.5,
-                    fontSize: 12,
+                AbsorbPointer(
+                  absorbing: true,
+                  child: TextFormField(
+                    controller: _contactNumberController,
+                    decoration: MyStyle.outlinedTextStyle.copyWith(
+                      labelText: 'Contact Number',
+                      hintText: 'Enter the contact number',
+                    ),
+                    style: const TextStyle(
+                      height: 1.5,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -516,3 +472,50 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
     } else {}
   }
 }
+
+
+// Row(
+// children: [
+// const Text(
+// 'Donation location is your location current?',
+// style: TextStyle(
+// fontSize: 12,
+// ),
+// ),
+// const Spacer(),
+// Switch(
+// value: isCurrentLocation,
+// onChanged: (bool value) async {
+// if (value) {
+// final status = await Permission.location.request();
+// if (status.isGranted) {
+// final position =
+// await Geolocator.getCurrentPosition(
+// desiredAccuracy: LocationAccuracy.high,
+// );
+// print(position.latitude);
+// latitude = position.latitude.toInt();
+// longitude = position.longitude.toInt();
+// setState(() {
+// isCurrentLocation = value;
+// _locationController.text =
+// 'Latitude: $latitude, Longitude: $longitude';
+// });
+// } else {
+// Helper.scaffoldMessenger(
+// 'Location permission is required to get current location',
+// context,
+// );
+// }
+// } else {
+// setState(
+// () {
+// isCurrentLocation = value;
+// _locationController.clear();
+// },
+// );
+// }
+// },
+// ),
+// ],
+// ),

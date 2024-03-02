@@ -19,20 +19,19 @@ class ChatRepository {
             .toList());
   }
 
-  bool isChatListExist(String userId,String receiverId) {
-    _firestore
+  Future<bool> isChatListExist(String userId, String receiverId) async {
+    final listOfChat = await _firestore
         .collection('chat_list')
         .where('senderId', isEqualTo: userId)
         .where('receiverId', isEqualTo: receiverId)
-        .get()
-        .then((value) {
-      if (value.docs.length > 0) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-    return false;
+        .get();
+    if (listOfChat.size > 0) {
+      print("Chat list exist");
+      return true;
+    } else {
+      print("Chat list not exist");
+      return false;
+    }
   }
 
   Stream<List<ChatModel>> getChats(String senderId, String receiverId) {

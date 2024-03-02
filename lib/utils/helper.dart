@@ -30,8 +30,7 @@ class Helper {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        content: const Text(
-            'Please fill all the fields or minimum 3 images are required.'),
+        content: Text(message),
         backgroundColor: Colors.black.withOpacity(0.8),
       ),
     );

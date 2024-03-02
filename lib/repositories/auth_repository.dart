@@ -23,9 +23,7 @@ class AuthRepository {
   }
 
   Future<UserCredential> signInWithOTP(
-    String verificationId,
-    String smsCode,
-  ) async {
+      String verificationId, String smsCode) async {
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId,
