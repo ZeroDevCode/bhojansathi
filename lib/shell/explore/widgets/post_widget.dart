@@ -11,14 +11,14 @@ class PostWidget extends StatelessWidget {
     {
       "pseudo": 'Ashirwad Seva Charitable Trust',
       "photo": "assets/images/donate.jpg",
-      "photoProfile": "assets/images/ngo3.jpg",
+      "photoProfile": "assets/images/ngo.jpg",
       "description":
           "Ashirwad Seva Charitable organization dedicated to working for Poor and Needy people.",
     },
     {
       "pseudo": 'Pareewartann Charitable Trust',
       "photo": "assets/images/donate.jpg",
-      "photoProfile": "assets/images/ngo3.jpg",
+      "photoProfile": "assets/images/ngo2.jpg",
       "description":
           "Pareewartann Charitable Trust is dedicated to working for Health, Water.",
     },
@@ -32,7 +32,7 @@ class PostWidget extends StatelessWidget {
     {
       "pseudo": 'PRAYAS',
       "photo": "assets/images/donate.jpg",
-      "photoProfile": "assets/images/ngo3.jpg",
+      "photoProfile": "assets/images/ngo4.jpg",
       "description":
           "PRAYAS organization dedicated to working for the Development of Mentally Challenged Children.",
     },

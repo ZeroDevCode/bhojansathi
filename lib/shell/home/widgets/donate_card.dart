@@ -15,7 +15,7 @@ class _DonationCardsState extends State<DonationCards> {
         Row(
           children: [
             const Text(
-              "Hunger spots near you",
+              "Request by NGO's",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
