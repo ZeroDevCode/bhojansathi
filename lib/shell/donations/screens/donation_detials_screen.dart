@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DonationDetails extends StatefulWidget {
   final String? donationId;
@@ -112,7 +113,7 @@ class _DonationDetailsState extends State<DonationDetails> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 200,
+                    height: 250,
                     child: PageView.builder(
                       physics: const BouncingScrollPhysics(),
                       itemCount: foodDonationModel.foodImage.length,
@@ -130,16 +131,28 @@ class _DonationDetailsState extends State<DonationDetails> {
                             },
                           );
                         },
-                        child: Container(
-                          margin: const EdgeInsets.all(10),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: MyStyle.containerDecoration,
-                          child: Image.network(
-                            foodDonationModel.foodImage[index],
-                            fit: BoxFit.cover,
-                            height: 200,
-                            width: double.infinity,
-                          ),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.all(10),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: MyStyle.containerDecoration,
+                              child: Image.network(
+                                foodDonationModel.foodImage[index],
+                                fit: BoxFit.cover,
+                                height: 200,
+                                width: double.infinity,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "Captured At: ${foodDonationModel.timeOfImages[index]}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -160,19 +173,86 @@ class _DonationDetailsState extends State<DonationDetails> {
               value: foodDonationModel.foodDonorAddress),
           myColumn(
               title: "Pickup Time",
+              value: "Before ${foodDonationModel.foodDonorEmail}"),
+          myColumn(
+              title: "Expire Time",
               value: "Before ${foodDonationModel.foodExpiryDate}"),
           Visibility(
             visible: foodDonationModel.foodDonorName.isNotEmpty,
             child: myColumn(
                 title: "Donor Name", value: foodDonationModel.foodDonorName),
           ),
-          myColumn(
-              title: "Donor Phone", value: foodDonationModel.foodDonorPhone),
-          Visibility(
-            visible: foodDonationModel.foodDonorEmail.isNotEmpty,
-            child: myColumn(
-                title: "Donor Email", value: foodDonationModel.foodDonorEmail),
+          Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
+            decoration: MyStyle.containerDecoration,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Donor Phone",
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    Text(
+                      foodDonationModel.foodDonorPhone,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    InkWell(
+                      onTap: () {
+                        _launchUrl(Uri.parse("tel:${foodDonationModel.foodDonorPhone}"));
+                      },
+                      child: const Icon(
+                        Icons.call,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
+          (foodDonationModel.foodDonorLatitude == "0" &&
+                  foodDonationModel.foodDonorLongitude == "0")
+              ? const SizedBox()
+              : Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
+                  decoration: MyStyle.containerDecoration,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Map address",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const Divider(),
+                      Row(
+                        children: [
+                          Text(
+                            "Latitude: ${foodDonationModel.foodDonorLatitude} \nLongitude: ${foodDonationModel.foodDonorLongitude}",
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          const Expanded(child: SizedBox()),
+                          IconButton(
+                            icon: const Icon(Icons.navigation_outlined),
+                            onPressed: () {
+                              _launchUrl(Uri.parse("https://maps.google.com/?q=${foodDonationModel.foodDonorLatitude},${foodDonationModel.foodDonorLongitude}"));
+                            },
+                            color: Colors.blue,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
           Container(
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(10),
@@ -341,5 +421,11 @@ class _DonationDetailsState extends State<DonationDetails> {
         ),
       ),
     );
+  }
+
+  Future<void> _launchUrl(_url) async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }

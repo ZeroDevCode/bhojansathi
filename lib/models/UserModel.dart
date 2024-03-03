@@ -1,56 +1,58 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 class UserModel extends Equatable {
-  final String userId;
-  final String firstName;
-  final String lastName;
-  final String? phoneNumber;
-  final String? role;
+  final String id;
+  final String name;
+  final String email;
+  final String phone;
+  final String address;
+  final String avatar;
+  final List organizations;
 
-  const UserModel({
-    required this.userId,
-    required this.firstName,
-    required this.lastName,
-    required this.phoneNumber,
-    required this.role,
+  UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.avatar,
+    required this.address,
+    required this.organizations,
   });
 
   @override
-  List<Object?> get props => [userId, firstName, lastName, phoneNumber];
-
-  UserModel copyWith({
-    String? userId,
-    String? firstName,
-    String? lastName,
-    String? phoneNumber,
-    String? role,
-  }) {
-    return UserModel(
-      userId: userId ?? this.userId,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      role: role ?? this.role,
-    );
-  }
+  // TODO: implement props
+  List<Object?> get props => [
+    id,
+    name,
+    email,
+    phone,
+    avatar,
+    address,
+    organizations,
+  ];
 
   Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
-      'first_name': firstName,
-      'lastName': lastName, // Change this field to match Firestore document
-      'phoneNumber': phoneNumber ?? '',
-      'role': role ?? '',
+      'id': id,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'avatar': avatar,
+      'address': address,
+      'organizations': organizations,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      userId: map['userId'] as String,
-      firstName: map['first_name'] as String,
-      lastName: map['lastName'] as String,
-      phoneNumber: map['phoneNumber'] as String?,
-      role: map['role'] as String?,
+      id: map['id'] as String ?? '',
+      name: map['name'] as String ?? '',
+      email: map['email'] as String ?? '' ,
+      phone: map['phone'] as String ?? '',
+      avatar: map['avatar'] as String ?? '',
+      address: map['address'] as String ?? '',
+      organizations: map['organizations'] as List ?? [],
     );
   }
 }

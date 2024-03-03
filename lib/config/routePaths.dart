@@ -3,7 +3,9 @@ class RoutePaths {
   static const String splashScreen = '/splashScreen';
   static const String loginScreen = '/loginScreen';
   static const String otpScreen = '/otpScreen/:verificationId';
+
   static const String userRegisterScreen = '/userRegisterScreen';
+
   static const String homeScreen = '/homeScreen';
   static const String onBoardingScreen = '/onBoardingScreen';
   static const String userTypeScreen = '/userTypeScreen';
@@ -23,4 +25,9 @@ class RoutePaths {
   static const String chatDetailScreen = '/chatDetailScreen/:id';
   static const String requestDonationScreen = "/requestDonationScreen";
   static const String exploreScreen = "/exploreScreen";
+
+  static const String organizationDetailScreen = "/organizationDetailScreen/:id";
+  static const String organizationListScreen = "/organizationListScreen";
+  static const String organizationCreateScreen = "/organizationProfileScreen";
+
 }

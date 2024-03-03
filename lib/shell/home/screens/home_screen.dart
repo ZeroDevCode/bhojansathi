@@ -1,11 +1,14 @@
 import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
+import 'package:bhojansathi/bloc/user/user_bloc.dart';
 import 'package:bhojansathi/common/app_bar.dart';
 import 'package:bhojansathi/config/routePaths.dart';
+import 'package:bhojansathi/generated/assets.dart';
 import 'package:bhojansathi/models/DonationModel.dart';
 import 'package:bhojansathi/utils/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -272,8 +275,23 @@ Widget _buildDonationList(BuildContext context) {
   return BlocBuilder<FoodDonationBloc, FoodDonationState>(
     builder: (context, state) {
       if (state is DonationLoadingState) {
-        return const Center(
-          child: CircularProgressIndicator(),
+        return Center(
+          child:Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: ListView.builder(
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 1.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const SizedBox(height: 80),
+                );
+              },
+            ),
+          ),
         );
       } else if (state is DonationLoadedState) {
         List<FoodDonationModel> donation = state.foodDonationList
@@ -298,18 +316,16 @@ Widget _buildDonationList(BuildContext context) {
                   children: [
                     Row(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 20.0,
-                          backgroundImage: AssetImage(
-                            'assets/images/ngo.png',
-                          ), // Replace with actual image path
+                          backgroundImage: AssetImage(Assets.assetsLogo),
                         ),
                         const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Karan Chaudhary',
+                              "Karan Charity",
                               style: MyStyle.textHeadingStyle,
                             ),
                             Text(

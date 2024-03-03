@@ -92,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: const Text('My Organizations'),
               leading:  const Icon(Icons.group_outlined),
               onTap: () {
-
+                context.push(RoutePaths.organizationListScreen);
               },
             ),
             const Divider(),

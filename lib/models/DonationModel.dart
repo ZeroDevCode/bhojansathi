@@ -23,6 +23,7 @@ class FoodDonationModel extends Equatable {
   String foodDonationTime;
   String foodDonationID;
   String foodRecipientId;
+  List timeOfImages;
 
   FoodDonationModel({
     required this.foodName,
@@ -47,6 +48,7 @@ class FoodDonationModel extends Equatable {
     required this.foodDonationTime,
     required this.foodDonationID,
     required this.foodRecipientId,
+    required this.timeOfImages,
   });
 
   Map<String, dynamic> toMap() {
@@ -73,34 +75,35 @@ class FoodDonationModel extends Equatable {
       'foodDonationTime': foodDonationTime,
       'foodDonationID': foodDonationID,
       'foodRecipientId': foodRecipientId,
+      'timeOfImages': timeOfImages,
     };
   }
 
-  //from map to model
   factory FoodDonationModel.fromMap(Map<String, dynamic> map) {
     return FoodDonationModel(
-      foodName: map['foodName'],
-      foodType: map['foodType'],
-      foodQuantity: map['foodQuantity'],
-      foodExpiryDate: map['foodExpiryDate'],
-      foodDescription: map['foodDescription'],
-      foodImage: map['foodImage'],
-      foodDonorName: map['foodDonorName'],
-      foodDonorEmail: map['foodDonorEmail'],
-      foodDonorPhone: map['foodDonorPhone'],
-      foodDonorAddress: map['foodDonorAddress'],
-      foodDonorCity: map['foodDonorCity'],
-      foodDonorState: map['foodDonorState'],
-      foodDonorCountry: map['foodDonorCountry'],
-      foodDonorZipCode: map['foodDonorZipCode'],
-      foodDonorLatitude: map['foodDonorLatitude'],
-      foodDonorLongitude: map['foodDonorLongitude'],
-      foodDonorUID: map['foodDonorUID'],
-      foodDonationStatus: map['foodDonationStatus'],
-      foodDonationDate: map['foodDonationDate'],
-      foodDonationTime: map['foodDonationTime'],
-      foodDonationID: map['foodDonationID'],
-      foodRecipientId: map['foodRecipientId'],
+      foodName: map['foodName'] ?? '',
+      foodType: map['foodType'] ?? '',
+      foodQuantity: map['foodQuantity'] ?? '',
+      foodExpiryDate: map['foodExpiryDate'] ?? '',
+      foodDescription: map['foodDescription'] ?? '',
+      foodImage: map['foodImage'] ?? '',
+      foodDonorName: map['foodDonorName'] ?? '',
+      foodDonorEmail: map['foodDonorEmail'] ?? '',
+      foodDonorPhone: map['foodDonorPhone'] ?? '',
+      foodDonorAddress: map['foodDonorAddress'] ?? '',
+      foodDonorCity: map['foodDonorCity'] ?? '',
+      foodDonorState: map['foodDonorState'] ?? '',
+      foodDonorCountry: map['foodDonorCountry'] ?? '',
+      foodDonorZipCode: map['foodDonorZipCode'] ?? '',
+      foodDonorLatitude: map['foodDonorLatitude'] ?? '',
+      foodDonorLongitude: map['foodDonorLongitude'] ?? '',
+      foodDonorUID: map['foodDonorUID'] ?? '',
+      foodDonationStatus: map['foodDonationStatus'] ?? '',
+      foodDonationDate: map['foodDonationDate'] ?? '',
+      foodDonationTime: map['foodDonationTime'] ?? '',
+      foodDonationID: map['foodDonationID'] ?? '',
+      foodRecipientId: map['foodRecipientId'] ?? '',
+      timeOfImages: map['timeOfImages'] ?? [],
     );
   }
 
@@ -129,5 +132,6 @@ class FoodDonationModel extends Equatable {
         foodDonationTime,
         foodDonationID,
         foodRecipientId,
+        timeOfImages,
       ];
 }

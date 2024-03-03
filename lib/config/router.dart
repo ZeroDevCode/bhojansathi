@@ -2,10 +2,9 @@ import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/features/auth/screen/auth_screen.dart';
 import 'package:bhojansathi/features/login/screens/login_screen.dart';
 import 'package:bhojansathi/features/login/screens/otp_screen.dart';
-import 'package:bhojansathi/features/login/screens/user_register_screen.dart';
-import 'package:bhojansathi/features/login/screens/user_types.dart';
-import 'package:bhojansathi/features/registration/screens/individual_screen.dart';
-import 'package:bhojansathi/features/registration/screens/organization_screen.dart';
+import 'package:bhojansathi/features/registration/screens/user_register.dart';
+import 'package:bhojansathi/features/registration/screens/organization_list_screen.dart';
+import 'package:bhojansathi/features/registration/screens/organization_create_screen.dart';
 import 'package:bhojansathi/features/splash/screens/on_boarding.dart';
 import 'package:bhojansathi/shell/base/screens/base_screen.dart';
 import 'package:bhojansathi/shell/chat/screens/chat_list_screen.dart';
@@ -42,12 +41,13 @@ final router = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: RoutePaths.otpScreen,
-      builder: (context, state) => OTPScreen(verificationId: state.pathParameters['verificationId']!),
+      builder: (context, state) =>
+          OTPScreen(verificationId: state.pathParameters['verificationId']!),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: RoutePaths.userRegisterScreen,
-      builder: (context, state) => const UserRegistrationScreen(),
+      builder: (context, state) => const UserRegisterScreen(),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
@@ -61,31 +61,25 @@ final router = GoRouter(
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
-      path: RoutePaths.userTypeScreen,
-      builder: (context, state) => const UserTypeScreen(),
-    ),
-    GoRoute(
-      path: RoutePaths.userRegisterScreen,
-      builder: (context, state) => const UserRegistrationScreen(),
-    ),
-    GoRoute(
-      path: RoutePaths.individualUserRegisterScreen,
-      builder: (context, state) => const IndividualUserRegisterScreen(),
-    ),
-    GoRoute(
-      path: RoutePaths.organizationProfileCreateScreen,
-      builder: (context, state) => const OrganizationProfileCreateScreen(),
-    ),
-    GoRoute(
       path: RoutePaths.profileMyDonationScreen,
       builder: (context, state) => const HistoryScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: RoutePaths.organizationListScreen,
+      builder: (context, state) => const OrganizationListScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: RoutePaths.organizationCreateScreen,
+      builder: (context, state) => const OrganizationProfileCreateScreen(),
     ),
     GoRoute(
       path: RoutePaths.profileScreen,
       pageBuilder: (context, state) => CustomTransitionPage(
         child: const ProfileScreen(),
-        transitionsBuilder:
-            (context, animation, secondaryAnimation, child) => child,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            child,
       ),
     ),
     GoRoute(

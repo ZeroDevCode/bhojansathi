@@ -69,6 +69,7 @@ class DonationRepository {
           foodDonationTime: time.toString().split(' ')[1],
           foodDonationID: foodDonationID,
           foodRecipientId: '',
+          timeOfImages: foodDonationModel.timeOfImages,
         );
         await _firestore
             .collection('food_donation')

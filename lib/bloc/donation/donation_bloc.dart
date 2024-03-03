@@ -7,7 +7,6 @@ import 'package:equatable/equatable.dart';
 import 'dart:developer' as dev;
 
 part 'donation_event.dart';
-
 part 'donation_state.dart';
 
 class FoodDonationBloc extends Bloc<FoodDonationEvent, FoodDonationState> {

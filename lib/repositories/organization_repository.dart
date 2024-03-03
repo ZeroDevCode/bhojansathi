@@ -76,7 +76,7 @@ class OrganizationRepository {
 
   Future<String> _uploadImage(String organizationID, String imagePath) async {
     try {
-      final ref = FirebaseStorage.instance
+      final ref = _firebaseStorage
           .ref()
           .child('organization_images')
           .child(organizationID)
@@ -86,7 +86,7 @@ class OrganizationRepository {
       final url = await snapshot.ref.getDownloadURL();
       return url;
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

@@ -2,13 +2,14 @@ import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
 import 'package:bhojansathi/bloc/chat/chat_list/chat_list_bloc.dart';
 import 'package:bhojansathi/bloc/donation/donation_bloc.dart';
 import 'package:bhojansathi/bloc/login/login_bloc.dart';
-import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
+import 'package:bhojansathi/bloc/organization/organization_bloc.dart';
+import 'package:bhojansathi/bloc/user/user_bloc.dart';
 import 'package:bhojansathi/config/router.dart';
 import 'package:bhojansathi/repositories/auth_repository.dart';
 import 'package:bhojansathi/repositories/chat_repository.dart';
 import 'package:bhojansathi/repositories/donation_repository.dart';
+import 'package:bhojansathi/repositories/organization_repository.dart';
 import 'package:bhojansathi/repositories/user_repository.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,11 +22,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseAppCheck.instance.activate(
-    webProvider: ReCaptchaV3Provider('AIzaSyCsNPOr42NMDcc4eBwVtXyGJkrTAMcyZKw'),
-    androidProvider: AndroidProvider.debug,
-    appleProvider: AppleProvider.debug,
-  );
   runApp(const MyApp());
 }
 
@@ -34,9 +30,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userRepository = UserRepository();
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => UserBloc(userRepository: UserRepository())
+            ..add(LoadUserEvent()),
+        ),
         BlocProvider(
           create: (context) =>
               AuthBloc(authRepository: AuthRepository())..add(AppStarted()),
@@ -45,14 +44,15 @@ class MyApp extends StatelessWidget {
           create: (context) => LogInBloc(authRepository: AuthRepository()),
         ),
         BlocProvider(
-          create: (context) => UserRegisterBloc(userRepository: userRepository),
-        ),
-        BlocProvider(
           create: (context) =>
               FoodDonationBloc(donationRepository: DonationRepository()),
         ),
         BlocProvider(
           create: (context) => ChatListBloc(chatRepository: ChatRepository()),
+        ),
+        BlocProvider(
+          create: (context) => OrganizationBloc(
+              organizationRepository: OrganizationRepository()),
         )
       ],
       child: MaterialApp.router(

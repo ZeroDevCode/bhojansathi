@@ -1,8 +1,7 @@
 import 'dart:developer' as dev;
 
-import 'package:bhojansathi/bloc/auth/auth_bloc.dart';
 import 'package:bhojansathi/bloc/login/login_bloc.dart';
-import 'package:bhojansathi/bloc/user/register/user_register_bloc.dart';
+import 'package:bhojansathi/bloc/user/user_bloc.dart';
 import 'package:bhojansathi/config/routePaths.dart';
 import 'package:bhojansathi/utils/helper.dart';
 import 'package:bhojansathi/utils/style.dart';
@@ -84,15 +83,6 @@ class _OTPScreenState extends State<OTPScreen> {
                   length: 6,
                   controller: otpController,
                   showCursor: true,
-                  // defaultPinTheme: PinTheme(
-                  //   width: 50,
-                  //   height: 50,
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.grey.shade300,
-                  //     borderRadius: BorderRadius.circular(10),
-                  //   ),
-                  // ),
-                  onCompleted: (pin) => print(pin),
                 ),
                 const SizedBox(
                   height: 20,
@@ -101,9 +91,22 @@ class _OTPScreenState extends State<OTPScreen> {
                   bloc: _loginBloc,
                   listener: (context, state) {
                     if (state is LogInStateSuccess) {
-                      Helper.scaffoldMessenger("Logged In", context);
+                      BlocProvider.of<UserBloc>(context).add(LoadUserEvent());
+                      BlocListener<UserBloc, UserState>(
+                        listener: (context, state) {
+                          if (state is UserLoadedState) {
+                            final users = state.userList.where((element) => element.id == FirebaseAuth.instance.currentUser!.uid);
+                            if(users.isNotEmpty){
+                             context.go(RoutePaths.baseScreen);
+                            } else {
+                              context.go(RoutePaths.userRegisterScreen);
+                            }
+                          }
+                        },
+                        child: Container(),
+                      );
                     } else if (state is LogInStateFailure) {
-                      Helper.scaffoldMessenger(state.error, context);
+
                     }
                   },
                   builder: (context, state) {
@@ -116,10 +119,10 @@ class _OTPScreenState extends State<OTPScreen> {
                       onPressed: () async {
                         if (otpController.text.isNotEmpty) {
                           showDialogOfOptSend(context);
-                          _loginBloc.add(VerifyOtpEvent(
-                            verificationId: verificationId,
-                            smsCode: otpController.text,
-                          ));
+                          BlocProvider.of<LogInBloc>(context).add(
+                              VerifyOtpEvent(
+                                  verificationId: verificationId,
+                                  smsCode: otpController.text));
                         } else {
                           Helper.scaffoldMessenger(
                               "Please enter the OTP", context);

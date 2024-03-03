@@ -9,9 +9,11 @@ import 'package:bhojansathi/utils/style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer' as dev;
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NewDonationScreen extends StatefulWidget {
   const NewDonationScreen({super.key});
@@ -23,9 +25,11 @@ class NewDonationScreen extends StatefulWidget {
 class _NewDonationScreenState extends State<NewDonationScreen> {
   final picker = ImagePicker();
   final images = <String>[];
+  final timesOfImages = <String>[];
+
   bool isCurrentLocation = false;
-  var latitude = 0;
-  var longitude = 0;
+  late double latitude = 0;
+  late double longitude = 0;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _typeController = TextEditingController();
@@ -36,6 +40,7 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
   final _contactNumberController = TextEditingController(
     text: FirebaseAuth.instance.currentUser?.phoneNumber ?? '',
   );
+  final _pickUpTimeController = TextEditingController();
 
   @override
   void initState() {
@@ -122,91 +127,64 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                         images.length < 5 ? images.length + 1 : images.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: () async {
-                          showBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SizedBox(
-                                height: 200,
-                                child: Column(
-                                  children: [
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        const Spacer(),
-                                        const Text(
-                                          'Select Image',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        IconButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          icon: const Icon(Icons.close),
-                                        ),
-                                      ],
-
-                                    ),
-                                    const Divider(color: Colors.black,height: 2,),
-                                    const SizedBox(height: 10),
-                                    ListTile(
-                                      leading: const Icon(Icons.camera_alt),
-                                      title: const Text('Camera'),
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        await getImageFromSource(
-                                          source: ImageSource.camera,
-                                          index: index,
-                                        );
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: const Icon(Icons.image),
-                                      title: const Text('Gallery'),
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        await getImageFromSource(
-                                          source: ImageSource.gallery,
-                                          index: index,
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
+                        onTap: () {
+                          if (index == images.length) {
+                            getImageFromSource(
+                              source: ImageSource.camera,
+                              index: index,
+                            );
+                          }
                         },
-                        child: Container(
-                          width: 180,
-                          margin: const EdgeInsets.only(
-                              top: 5, bottom: 5, right: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black12,
-                            ),
-                            color: Colors.black12,
-                            borderRadius: BorderRadius.circular(10),
-                            image: (index < images.length)
-                                ? DecorationImage(
-                                    image: FileImage(
-                                      File(images[index]),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 180,
+                              margin: const EdgeInsets.only(
+                                  top: 5, bottom: 5, right: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black12,
+                                ),
+                                color: Colors.black12,
+                                borderRadius: BorderRadius.circular(10),
+                                image: (index < images.length)
+                                    ? DecorationImage(
+                                        image: FileImage(
+                                          File(images[index]),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : null,
+                              ),
+                              child: (index < images.length)
+                                  ? null
+                                  : const Center(
+                                      child: Icon(
+                                        Icons.camera_alt_outlined,
+                                      ),
                                     ),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
-                          ),
-                          child: (index < images.length)
-                              ? null
-                              : const Center(
-                                  child: Icon(
-                                    Icons.camera_alt_outlined,
+                            ),
+                            if (index < images.length)
+                              Positioned(
+                                top: 5,
+                                right: 5,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      images.removeAt(index);
+                                    });
+                                  },
+                                  child: const CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 ),
+                              ),
+                          ],
                         ),
                       );
                     },
@@ -320,66 +298,92 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: AbsorbPointer(
-                          absorbing: true,
-                          child: TextFormField(
-                            controller: _expiryDateController,
-                            decoration: MyStyle.outlinedTextStyle.copyWith(
-                              labelText: 'Expiry Date',
-                              hintText: 'Enter the expiry date of the food',
+                        child: TextFormField(
+                          controller: _pickUpTimeController,
+                          decoration: MyStyle.outlinedTextStyle.copyWith(
+                            labelText: 'Maximum Pickup time',
+                            hintText: 'Enter the expiry date of the food',
+                            suffixIcon: IconButton(
+                              onPressed: () async {
+                                final DateTime? picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime(2101),
+                                );
+                                if (picked != null) {
+                                  final TimeOfDay? time = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  );
+                                  final formattedDate =
+                                      DateFormat('yyyy-MM-dd').format(picked);
+                                  _pickUpTimeController.text = formattedDate +
+                                      ' ' +
+                                      DateFormat('hh:mm a').format(
+                                        DateTime(
+                                          picked.year,
+                                          picked.month,
+                                          picked.day,
+                                          time!.hour,
+                                          time.minute,
+                                        ),
+                                      );
+                                }
+                              },
+                              icon: const Icon(Icons.calendar_today),
                             ),
                           ),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.date_range),
-                        onPressed: () async {
-                          final DateTime? datePicker = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2101),
-                          );
-                          if (context.mounted) {
-                            if (datePicker != null) {
-                              final TimeOfDay? timePiker = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              );
-                              if (timePiker != null) {
-                                setState(() {
-                                  DateTime temp = DateTime(
-                                    datePicker.year,
-                                    datePicker.month,
-                                    datePicker.day,
-                                    timePiker.hour,
-                                    timePiker.minute,
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _expiryDateController,
+                          decoration: MyStyle.outlinedTextStyle.copyWith(
+                            labelText: 'Expiry Date',
+                            hintText: 'Enter the expiry date of the food',
+                            suffixIcon: IconButton(
+                              onPressed: () async {
+                                final DateTime? picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime(2101),
+                                );
+                                if (picked != null) {
+                                  final TimeOfDay? time = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
                                   );
-                                  _expiryDateController.text = DateFormat(
-                                    'yyyy/MM/dd  HH:mm:ss a',
-                                  ).format(temp);
-                                  setState(() {});
-                                });
-                              } else {
-                                if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Please select the time'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
+                                  final formattedDate =
+                                      DateFormat('yyyy-MM-dd').format(picked);
+                                  _expiryDateController.text = formattedDate +
+                                      ' ' +
+                                      DateFormat('hh:mm a').format(
+                                        DateTime(
+                                          picked.year,
+                                          picked.month,
+                                          picked.day,
+                                          time!.hour,
+                                          time.minute,
+                                        ),
+                                      );
                                 }
-                              }
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please select the date'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          }
-                        },
+                              },
+                              icon: const Icon(Icons.calendar_today),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -431,6 +435,112 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                 const SizedBox(
                   height: 10,
                 ),
+                Row(
+                  children: [
+                    const Text(
+                      'Donation location is your location current?',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                    const Spacer(),
+                    Switch(
+                      value: isCurrentLocation,
+                      onChanged: (bool value) async {
+                        if (value) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Location Permission'),
+                                content: const Text(
+                                    'Location permission is required to get current location'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      final status =
+                                          await Permission.location.request();
+                                      if (status.isGranted) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: const Row(
+                                                children: [
+                                                  CircularProgressIndicator(),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Text("Getting your location"),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                        final position =
+                                            await Geolocator.getCurrentPosition(
+                                          desiredAccuracy:
+                                              LocationAccuracy.high,
+                                        );
+                                        Navigator.pop(context);
+                                        // print(position.latitude);
+                                        setState(() {
+                                          isCurrentLocation = value;
+                                          _locationController.text =
+                                              'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
+                                        });
+                                      } else {
+                                        Helper.scaffoldMessenger(
+                                          'Location permission is required to get current location',
+                                          context,
+                                        );
+                                      }
+                                    },
+                                    child: const Text('Ok'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          final status = await Permission.location.request();
+                          if (status.isGranted) {
+                            final position =
+                                await Geolocator.getCurrentPosition(
+                              desiredAccuracy: LocationAccuracy.high,
+                            );
+                            print(position.latitude);
+                            setState(() {
+                              isCurrentLocation = value;
+                              _locationController.text =
+                                  'Latitude: ${position.latitude}, Longitude: ${position.longitude}';
+                              latitude = position.latitude;
+                              longitude = position.longitude;
+                            });
+                          } else {
+                            Helper.scaffoldMessenger(
+                              'Location permission is required to get current location',
+                              context,
+                            );
+                          }
+                        } else {
+                          setState(
+                            () {
+                              isCurrentLocation = value;
+                              _locationController.clear();
+                            },
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -451,17 +561,15 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                         foodDescription: _descriptionController.text,
                         foodImage: images,
                         foodDonorName: '',
-                        foodDonorEmail: '',
+                        foodDonorEmail: _pickUpTimeController.text,
                         foodDonorPhone: _contactNumberController.text,
                         foodDonorAddress: _locationController.text,
                         foodDonorCity: '',
                         foodDonorState: '',
                         foodDonorCountry: '',
                         foodDonorZipCode: '',
-                        foodDonorLatitude:
-                            isCurrentLocation ? latitude.toString() : '',
-                        foodDonorLongitude:
-                            isCurrentLocation ? longitude.toString() : '',
+                        foodDonorLatitude: latitude.toString(),
+                        foodDonorLongitude: longitude.toString(),
                         foodDonorUID:
                             FirebaseAuth.instance.currentUser?.uid ?? '',
                         foodDonationStatus: 'pending',
@@ -470,6 +578,7 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
                         foodDonationID: DateTime.now().toString() +
                             FirebaseAuth.instance.currentUser!.uid,
                         foodRecipientId: '',
+                        timeOfImages: timesOfImages,
                       );
                       BlocProvider.of<FoodDonationBloc>(context).add(
                         AddFoodDonationEvent(foodDonationModel: donation),
@@ -516,58 +625,9 @@ class _NewDonationScreenState extends State<NewDonationScreen> {
 
     if (xFilePick != null) {
       final file = File(pickedFile!.path);
-
-      setState(
-        () {
-          images.add(file.path);
-        },
-      );
-    } else {}
+      images.add(file.path);
+      timesOfImages.add(DateTime.now().toString());
+      setState(() {});
+    }
   }
 }
-
-// Row(
-// children: [
-// const Text(
-// 'Donation location is your location current?',
-// style: TextStyle(
-// fontSize: 12,
-// ),
-// ),
-// const Spacer(),
-// Switch(
-// value: isCurrentLocation,
-// onChanged: (bool value) async {
-// if (value) {
-// final status = await Permission.location.request();
-// if (status.isGranted) {
-// final position =
-// await Geolocator.getCurrentPosition(
-// desiredAccuracy: LocationAccuracy.high,
-// );
-// print(position.latitude);
-// latitude = position.latitude.toInt();
-// longitude = position.longitude.toInt();
-// setState(() {
-// isCurrentLocation = value;
-// _locationController.text =
-// 'Latitude: $latitude, Longitude: $longitude';
-// });
-// } else {
-// Helper.scaffoldMessenger(
-// 'Location permission is required to get current location',
-// context,
-// );
-// }
-// } else {
-// setState(
-// () {
-// isCurrentLocation = value;
-// _locationController.clear();
-// },
-// );
-// }
-// },
-// ),
-// ],
-// ),
